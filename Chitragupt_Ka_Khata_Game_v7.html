@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chitragupt Ka Khata — Your life. On record.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Kalam',cursive,'Comic Sans MS',cursive;
+  background:#f5edd8;color:#2c1a0e;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(139,99,67,0.07) 28px),
+    repeating-linear-gradient(90deg,transparent,transparent 27px,rgba(139,99,67,0.04) 28px);
+}
+
+:root{
+  --ink:#2c1a0e;--ink2:#5c3d1e;--ink3:#8b6343;
+  --paper:#f5edd8;--paper2:#ede0c0;--paper3:#e2d0a8;
+  --red:#b84a2f;--gold:#c9881a;--plum:#6b3a6b;--teal:#2e7d7a;--sage:#5c8a6a;
+  --red-l:#fdf0ec;--gold-l:#fbf5e0;--plum-l:#f5eef8;--teal-l:#e8f4f3;
+  --h:'Caveat',cursive,'Comic Sans MS',cursive;
+  --b:'Kalam',cursive,'Comic Sans MS',cursive;
+}
+
+/* ── SCREENS ───────────────────────────────────────────── */
+.screen{display:none;flex-direction:column;height:100vh;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── SCORE BAR ─────────────────────────────────────────── */
+.sbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;flex-shrink:0;
+  background:var(--ink);color:var(--paper);
+  font-family:var(--h);font-size:1.05rem;
+  transition:background 0.4s;
+  position:relative;overflow:hidden;
+}
+.sbar::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='8' cy='8' r='1.5' fill='%23c9881a' opacity='0.15'/%3E%3Ccircle cx='28' cy='28' r='1.5' fill='%23c9881a' opacity='0.15'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.sbar .part-lbl{font-size:0.85rem;opacity:0.75;font-style:italic;text-align:center}
+.tscore{display:flex;align-items:center;gap:8px}
+.tok{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:1.2rem;border:2px solid rgba(255,255,255,0.25);
+  transition:transform 0.15s;
+}
+.tok.bump{transform:scale(1.4)}
+.tok-a{background:var(--red);color:#fff}
+.tok-b{background:var(--gold);color:#fff}
+
+/* ── SHARED COMPONENTS ─────────────────────────────────── */
+.sketch{
+  border:2.5px solid var(--ink2);border-radius:3px;position:relative;
+  box-shadow:4px 4px 0 rgba(44,26,14,0.18),inset 0 0 50px rgba(139,99,67,0.05);
+}
+.sketch::before{
+  content:'';position:absolute;inset:4px;
+  border:1px dashed rgba(92,61,30,0.2);border-radius:2px;pointer-events:none;
+}
+
+.btn{
+  font-family:var(--h);font-size:1.15rem;font-weight:700;
+  background:var(--ink);color:var(--paper);border:2.5px solid var(--ink);
+  padding:9px 26px;border-radius:3px;cursor:pointer;letter-spacing:0.4px;
+  box-shadow:3px 3px 0 rgba(44,26,14,0.28);
+  transition:transform 0.1s,box-shadow 0.1s;
+}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(44,26,14,0.28)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(44,26,14,0.25)}
+.btn.out{background:transparent;color:var(--ink)}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
+.btn.plum{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn.teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.sage{background:var(--sage);border-color:var(--sage);color:#fff}
+.btn.sm{font-size:0.95rem;padding:6px 16px}
+.btn.lg{font-size:1.4rem;padding:13px 36px}
+.btn:disabled{opacity:0.45;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 rgba(44,26,14,0.15)}
+
+/* ── SCROLL AREA ───────────────────────────────────────── */
+.scroll{overflow-y:auto;flex:1;
+  scrollbar-width:thin;scrollbar-color:var(--ink3) transparent}
+.scroll::-webkit-scrollbar{width:5px}
+.scroll::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:3px}
+
+/* ════════════════════════════════════════════════════════
+   TITLE SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-title{align-items:center;justify-content:flex-start;padding:0;overflow-y:auto}
+.title-wrap{
+  max-width:640px;width:100%;text-align:center;
+  padding:24px 36px 32px;background:rgba(255,255,255,0.22);
+  position:relative;
+}
+.title-illustration{width:100%;max-width:640px;display:block;flex-shrink:0}
+.orn{font-family:var(--h);font-size:1.1rem;color:var(--ink3);letter-spacing:7px;margin-bottom:10px}
+.t-main{font-family:var(--h);font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:700;
+  color:var(--ink);line-height:1.1;margin-bottom:8px}
+.t-hindi{font-family:var(--h);font-size:clamp(1.1rem,2.5vw,1.7rem);color:var(--red);margin-bottom:8px}
+.t-tag{font-family:var(--b);font-size:0.95rem;color:var(--ink2);font-style:italic;margin-bottom:28px}
+.t-sub{font-family:var(--b);font-size:0.8rem;color:var(--ink3);margin-top:12px}
+
+/* artifact strip on score bar */
+.sbar-artifacts{display:flex;align-items:center;gap:6px;opacity:0.55}
+
+/* corner diya decorators */
+.screen-deco{position:absolute;opacity:0.18;pointer-events:none}
+
+/* ════════════════════════════════════════════════════════
+   ABOUT SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-about{align-items:center;justify-content:flex-start;padding:20px}
+.about-inner{max-width:640px;width:100%;padding:32px 36px}
+.about-h{font-family:var(--h);font-size:2rem;font-weight:700;color:var(--ink);margin-bottom:18px}
+.about-p{font-family:var(--b);font-size:0.97rem;color:var(--ink2);line-height:1.75;margin-bottom:14px}
+.khata-box{
+  border-left:4px solid var(--gold);background:var(--gold-l);
+  padding:18px 22px;margin:18px 0;border-radius:2px;
+}
+.khata-meaning{font-family:var(--b);font-size:0.93rem;color:var(--ink);line-height:1.8}
+.khata-meaning li{margin-left:20px;margin-bottom:4px}
+.tagline-box{
+  text-align:center;padding:20px;border:3px solid var(--gold);
+  background:rgba(201,136,26,0.06);margin-top:20px;border-radius:2px;
+}
+.tagline-box .q{font-family:var(--h);font-size:1.5rem;font-weight:700;color:var(--ink)}
+.tagline-box .e{font-family:var(--b);font-size:0.9rem;color:var(--red);font-style:italic;margin-top:6px}
+
+/* ════════════════════════════════════════════════════════
+   SETUP SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-setup{align-items:center;justify-content:center;padding:20px;gap:20px}
+.setup-h{font-family:var(--h);font-size:1.9rem;font-weight:700;color:var(--ink);text-align:center}
+.setup-note{font-family:var(--b);font-size:0.88rem;color:var(--ink3);text-align:center}
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:560px;width:100%}
+.team-box{padding:22px 20px;text-align:center}
+.team-lbl{font-family:var(--h);font-size:1.2rem;font-weight:700;margin-bottom:12px}
+.team-inp{
+  font-family:var(--h);font-size:1.2rem;
+  background:transparent;border:none;border-bottom:2.5px solid var(--ink2);
+  color:var(--ink);text-align:center;width:100%;padding:6px;outline:none;
+}
+.team-inp:focus{border-bottom-color:var(--ink)}
+.team-inp-note{font-family:var(--b);font-size:0.75rem;color:var(--ink3);margin-top:6px}
+
+/* ════════════════════════════════════════════════════════
+   PART INTRO SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-intro{align-items:center;justify-content:flex-start}
+.intro-body{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.intro-card{max-width:620px;width:100%;padding:30px 34px}
+.intro-pnum{font-family:var(--h);font-size:0.9rem;text-transform:uppercase;letter-spacing:4px;color:var(--ink3);margin-bottom:6px}
+.intro-title{font-family:var(--h);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:700;color:var(--ink);margin-bottom:8px}
+.intro-sub{font-family:var(--b);font-size:0.97rem;color:var(--ink2);line-height:1.65;margin-bottom:14px}
+.intro-mech{font-family:var(--b);font-size:0.92rem;color:var(--ink2);line-height:1.65;
+  border-left:3px solid var(--ink2);padding:10px 16px;margin-bottom:14px}
+.intro-tok{font-family:var(--b);font-size:0.84rem;color:var(--ink3);
+  border:1.5px dashed var(--gold);background:rgba(201,136,26,0.08);
+  padding:10px 14px;border-radius:2px;margin-bottom:20px}
+
+/* ════════════════════════════════════════════════════════
+   SELECT SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-select{align-items:stretch}
+.sel-header{flex-shrink:0;padding:14px 20px;border-bottom:1.5px solid rgba(44,26,14,0.12)}
+.sel-h{font-family:var(--h);font-size:1.4rem;font-weight:700;color:var(--ink)}
+.sel-note{font-family:var(--b);font-size:0.85rem;color:var(--ink3);margin-top:2px}
+.q-list{padding:10px 16px;display:flex;flex-direction:column;gap:6px}
+.qi{
+  display:flex;align-items:flex-start;gap:10px;padding:9px 12px;
+  cursor:pointer;border:2px solid transparent;border-radius:3px;
+  background:rgba(255,255,255,0.35);transition:all 0.12s;
+}
+.qi:hover{background:rgba(255,255,255,0.65);border-color:var(--ink3)}
+.qi.sel{background:var(--paper2);border-color:var(--ink);border-width:2.5px}
+.qi-num{font-family:var(--h);font-size:0.95rem;font-weight:700;color:var(--ink3);min-width:24px;padding-top:1px}
+.qi-txt{font-family:var(--b);font-size:0.9rem;color:var(--ink);line-height:1.5}
+.sel-footer{flex-shrink:0;display:flex;align-items:center;gap:12px;
+  padding:12px 18px;border-top:1.5px solid rgba(44,26,14,0.12)}
+.sel-count{font-family:var(--h);font-size:1rem;color:var(--ink3)}
+
+/* ════════════════════════════════════════════════════════
+   PLAY SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-play{align-items:stretch}
+.play-body{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:16px;gap:14px;overflow:hidden}
+
+/* card flip */
+.card-wrap{perspective:900px;width:100%;max-width:700px}
+.card-inner{
+  position:relative;transform-style:preserve-3d;
+  transition:transform 0.55s cubic-bezier(.4,0,.2,1);
+  min-height:230px;cursor:pointer;
+}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:28px 32px;display:flex;flex-direction:column;justify-content:center;
+}
+.card-back{transform:rotateY(180deg);background:var(--paper2)}
+.c-suit{font-family:var(--h);font-size:0.88rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:3px;margin-bottom:12px;opacity:0.75}
+.c-q{font-family:var(--h);font-size:clamp(1.3rem,3.2vw,1.95rem);font-weight:600;
+  line-height:1.45;color:var(--ink)}
+.c-tap{font-family:var(--b);font-size:0.8rem;color:var(--ink3);font-style:italic;margin-top:16px}
+.c-ans{font-family:var(--b);font-size:0.95rem;color:var(--ink2);line-height:1.65}
+.c-hint{font-family:var(--b);font-size:0.82rem;color:var(--ink3);font-style:italic;margin-top:10px}
+
+/* dumb charades acting prompt */
+.act-prompt{
+  background:var(--plum-light,#f5eef8);border-left:4px solid var(--plum,#6b3a6b);
+  padding:12px 14px;border-radius:2px;margin-top:12px;
+}
+.act-label{font-family:var(--h);font-size:0.9rem;font-weight:700;color:var(--plum,#6b3a6b);margin-bottom:6px}
+.act-text{font-family:var(--b);font-size:0.9rem;color:var(--ink2,#5c3d1e);line-height:1.6}
+
+/* pictionary */
+.pic-term{font-family:var(--h);font-size:clamp(2rem,5.5vw,3.4rem);font-weight:700;
+  color:var(--plum);text-align:center;white-space:pre-line;line-height:1.2}
+.pic-inst{font-family:var(--b);font-size:0.85rem;color:var(--ink3);
+  font-style:italic;text-align:center;margin-top:8px}
+
+/* timer */
+.timer-row{display:flex;align-items:center;gap:14px;width:100%;max-width:700px}
+.timer-ring{position:relative;width:72px;height:72px;flex-shrink:0}
+.timer-ring svg{transform:rotate(-90deg)}
+.t-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--h);font-size:1.7rem;font-weight:700;color:var(--ink)}
+.t-num.warn{color:var(--red)}
+.timer-info{flex:1}
+.t-lbl{font-family:var(--h);font-size:1rem;color:var(--ink3)}
+.timer-btns{display:flex;gap:8px}
+
+/* true/false */
+.tf-btns{display:flex;gap:16px;margin-top:10px}
+.tf-reveal{
+  font-family:var(--h);font-size:2.2rem;font-weight:700;text-align:center;
+  padding:14px 24px;margin-top:12px;width:100%;max-width:700px;display:none;
+}
+.tf-reveal.true{color:var(--sage);background:var(--teal-l);border-color:var(--sage)}
+.tf-reveal.false{color:var(--red);background:var(--red-l);border-color:var(--red)}
+
+/* dil se */
+.dil-row{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.dil-lbl{font-family:var(--b);font-size:0.85rem;color:var(--ink3)}
+.dil-btn{
+  font-family:var(--h);font-size:0.95rem;font-weight:700;
+  background:var(--paper);border:2px solid var(--ink2);color:var(--ink);
+  padding:5px 14px;border-radius:2px;cursor:pointer;
+  box-shadow:2px 2px 0 rgba(44,26,14,0.18);transition:background 0.12s;
+}
+.dil-btn:hover{background:var(--paper3)}
+.dil-btn.flash{background:var(--gold);color:#fff}
+
+/* nav */
+.play-nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;border-top:1.5px solid rgba(44,26,14,0.12)}
+.q-ctr{font-family:var(--h);font-size:1rem;color:var(--ink3)}
+.nav-btns{display:flex;gap:8px}
+
+/* ════════════════════════════════════════════════════════
+   SCOREBOARD SCREEN
+   ════════════════════════════════════════════════════════ */
+#s-score{align-items:center;justify-content:flex-start;padding:20px}
+.score-inner{max-width:640px;width:100%;text-align:center}
+.score-eyebrow{font-family:var(--h);font-size:0.9rem;text-transform:uppercase;
+  letter-spacing:4px;color:var(--ink3);margin-bottom:8px}
+.score-h{font-family:var(--h);font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--ink);margin-bottom:24px}
+.score-cards{display:flex;gap:24px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
+.sc{padding:28px 36px;text-align:center;min-width:200px}
+.sc-name{font-family:var(--h);font-size:1.6rem;font-weight:700;margin-bottom:4px}
+.sc-num{font-family:var(--h);font-size:4rem;font-weight:700;line-height:1}
+.sc-unit{font-family:var(--b);font-size:0.9rem;color:var(--ink3)}
+.trophy{display:inline-block;font-family:var(--h);font-size:1rem;
+  background:var(--gold);color:#fff;padding:5px 18px;border-radius:2px;margin-top:10px}
+.closing-box{padding:22px 28px;background:var(--gold-l);text-align:left;margin-bottom:24px}
+.closing-q{font-family:var(--h);font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:10px}
+.closing-p{font-family:var(--b);font-size:0.93rem;color:var(--ink2);line-height:1.75}
+.score-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ── UTILITY ─────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp 0.35s ease forwards}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+.pulse{animation:pulse 0.9s ease-in-out infinite}
+
+/* ── EDIT BUTTON ON QUESTION ROWS ─────────────────────── */
+.qi{position:relative;padding-right:80px}
+.qi-edit{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-family:var(--b);font-size:0.75rem;color:var(--ink3);
+  background:var(--paper2);border:1.5px solid var(--ink3);
+  padding:3px 9px;border-radius:2px;cursor:pointer;
+  opacity:0;transition:opacity 0.15s;white-space:nowrap;z-index:2;
+}
+.qi:hover .qi-edit{opacity:1}
+.qi-edit:hover{background:var(--paper3);color:var(--ink)}
+
+/* ── EDIT MODAL ──────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(44,26,14,0.6);
+  align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--paper);border:2.5px solid var(--ink2);border-radius:3px;
+  box-shadow:6px 6px 0 rgba(44,26,14,0.28);
+  width:100%;max-width:580px;max-height:88vh;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+}
+.modal-box::before{
+  content:'';position:absolute;inset:5px;
+  border:1px dashed rgba(92,61,30,0.18);border-radius:2px;pointer-events:none;z-index:0;
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 18px;border-bottom:1.5px solid rgba(44,26,14,0.12);
+  flex-shrink:0;position:relative;z-index:1;
+}
+.modal-title{font-family:var(--h);font-size:1.25rem;font-weight:700;color:var(--ink)}
+.modal-suite{font-family:var(--b);font-size:0.8rem;color:var(--ink3);margin-top:2px}
+.modal-close{
+  font-family:var(--h);font-size:1.3rem;background:none;border:none;
+  color:var(--ink3);cursor:pointer;padding:2px 8px;border-radius:2px;line-height:1;
+}
+.modal-close:hover{background:var(--paper2);color:var(--ink)}
+.modal-body{
+  padding:16px 18px;overflow-y:auto;flex:1;
+  display:flex;flex-direction:column;gap:13px;position:relative;z-index:1;
+}
+.mf label{
+  display:block;font-family:var(--h);font-size:0.95rem;font-weight:700;
+  color:var(--ink2);margin-bottom:4px;
+}
+.mf .fhint{
+  font-family:var(--b);font-size:0.76rem;color:var(--ink3);
+  font-style:italic;margin-bottom:5px;display:block;
+}
+.mf textarea{
+  width:100%;font-family:var(--b);font-size:0.9rem;color:var(--ink);
+  background:rgba(255,255,255,0.6);border:2px solid var(--ink3);border-radius:2px;
+  padding:8px 10px;resize:vertical;outline:none;line-height:1.55;
+  transition:border-color 0.15s;min-height:60px;
+}
+.mf textarea:focus{border-color:var(--ink);background:rgba(255,255,255,0.9)}
+.modal-foot{
+  display:flex;align-items:center;gap:10px;padding:11px 18px;
+  border-top:1.5px solid rgba(44,26,14,0.12);flex-shrink:0;
+  position:relative;z-index:1;flex-wrap:wrap;
+}
+.saved-msg{
+  font-family:var(--b);font-size:0.85rem;color:var(--sage);
+  display:none;margin-left:4px;
+}
+.saved-msg.show{display:inline}
+
+/* ── FLYER / TITLE SCREEN STYLES ──────────────────────── */
+
+600;700&family=Kalam:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+
+
+/* paper texture lines */
+
+/* all content above texture */
+.page>*{position:relative;z-index:1}
+
+/* ── HEADER BAND ──────────────────────────── */
+.fl-header{
+  background:#3e2005;
+  padding:28px 32px 20px;
+  text-align:center;
+  border-bottom:4px solid #c9881a;
+}
+.fl-header-ornament{
+  font-family:'Caveat',cursive;
+  font-size:0.95rem;color:#c9881a;letter-spacing:5px;
+  margin-bottom:10px;
+}
+.fl-header-title{
+  font-family:'Caveat',cursive;
+  font-size:2.6rem;font-weight:700;color:#faf5ed;
+  line-height:1.1;margin-bottom:4px;
+}
+.fl-header-hindi{
+  font-family:'Caveat',cursive;
+  font-size:1.3rem;color:#c9881a;margin-bottom:8px;
+}
+.fl-header-tag{
+  font-family:'Kalam',cursive;
+  font-size:0.9rem;color:#ede0c0;font-style:italic;
+}
+.fl-header-sparsh{
+  font-family:'Kalam',cursive;
+  font-size:0.78rem;color:#8b7050;margin-top:10px;letter-spacing:1px;
+}
+
+/* ── CHARACTERS ROW ───────────────────────── */
+.fl-characters{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;border-bottom:2px solid #c9881a;
+}
+.fl-char-panel{
+  padding:20px 22px;
+  border-right:1px solid rgba(139,99,67,0.25);
+}
+.fl-char-panel:last-child{border-right:none}
+.fl-char-svg-wrap{
+  display:flex;justify-content:center;margin-bottom:12px;
+}
+.fl-char-name{
+  font-family:'Caveat',cursive;font-size:1.4rem;font-weight:700;
+  color:#3e2005;margin-bottom:3px;
+}
+.fl-char-role{
+  font-family:'Kalam',cursive;font-size:0.78rem;
+  color:#8b6343;font-style:italic;margin-bottom:8px;
+}
+.fl-char-desc{
+  font-family:'Kalam',cursive;font-size:0.82rem;
+  color:#4a2e10;line-height:1.65;
+}
+.fl-char-quote{
+  margin-top:8px;padding:7px 12px;
+  border-left:3px solid #c9881a;
+  background:rgba(201,136,26,0.08);
+  font-family:'Caveat',cursive;font-size:0.9rem;
+  color:#5c3010;font-style:italic;
+}
+
+/* ── MAIN CONTENT ─────────────────────────── */
+.content{padding:20px 28px 0;}
+
+.fl-section-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;margin-top:18px;
+}
+.fl-section-icon{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.fl-section-title{
+  font-family:'Caveat',cursive;font-size:1.25rem;font-weight:700;color:#3e2005;
+}
+.fl-section-
+
+/* khata meaning box */
+.fl-khata-box{
+  background:rgba(201,136,26,0.1);border:1.5px solid #c9881a;
+  border-radius:3px;padding:12px 16px;margin:10px 0;
+}
+.fl-khata-meanings{list-style:none;display:flex;flex-direction:column;gap:5px}
+.fl-khata-meanings li{
+  font-family:'Kalam',cursive;font-size:0.82rem;color:#3e2005;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.fl-meaning-num{
+  font-family:'Caveat',cursive;font-weight:700;font-size:1rem;
+  color:#c9881a;min-width:18px;
+}
+
+/* living will Q&A */
+.fl-qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.fl-qa-card{
+  background:#fff8f0;border:1.5px solid rgba(139,99,67,0.3);
+  border-radius:3px;padding:10px 12px;
+}
+.fl-qa-q{
+  font-family:'Caveat',cursive;font-size:0.9rem;font-weight:700;
+  color:#b84a2f;margin-bottom:4px;
+}
+.fl-qa-a{
+  font-family:'Kalam',cursive;font-size:0.8rem;
+  color:#3e2005;line-height:1.6;
+}
+
+/* legal box */
+.fl-legal-box{
+  background:#e8f4f3;border-left:4px solid #2e7d7a;
+  padding:10px 14px;border-radius:2px;margin:10px 0;
+}
+.fl-legal-head{
+  font-family:'Caveat',cursive;font-size:0.92rem;font-weight:700;
+  color:#2e7d7a;margin-bottom:4px;
+}
+.fl-legal-
+
+/* what to write */
+.fl-steps{display:flex;flex-direction:column;gap:6px;margin:8px 0;}
+.step{display:flex;align-items:flex-start;gap:10px;}
+.fl-step-num{
+  width:22px;height:22px;border-radius:50%;
+  background:#3e2005;color:#faf5ed;
+  font-family:'Caveat',cursive;font-size:0.88rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  margin-top:1px;
+}
+.fl-step-text{
+  font-family:'Kalam',cursive;font-size:0.81rem;color:#3e2005;line-height:1.6;
+}
+.fl-step-text strong{font-weight:700;color:#b84a2f;}
+
+/* divider */
+.fl-divider{
+  height:1px;background:linear-gradient(90deg,transparent,#c9881a 20%,#c9881a 80%,transparent);
+  margin:14px 0;opacity:0.5;
+}
+
+/* tagline strip */
+.fl-tagline-strip{
+  background:#3e2005;
+  padding:12px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+  margin-top:16px;
+}
+.fl-tagline-main{
+  font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;
+  color:#c9881a;
+}
+.fl-tagline-en{
+  font-family:'Kalam',cursive;font-size:0.82rem;
+  color:#ede0c0;font-style:italic;
+}
+.fl-tagline-contact{
+  font-family:'Kalam',cursive;font-size:0.78rem;
+  color:#8b7050;text-align:right;
+}
+
+/* artifact footer */
+.fl-art-footer{
+  display:flex;justify-content:center;align-items:center;
+  gap:16px;padding:10px 28px 14px;
+  border-top:1px dashed rgba(139,99,67,0.3);
+}
+
+
+
+
+/* ── TITLE SCREEN FLYER WRAPPER ─────────────────────── */
+#s-title{align-items:stretch;justify-content:flex-start;padding:0;overflow-y:auto}
+.fl-title-page{
+  width:100%;max-width:700px;margin:0 auto;
+  background:#faf5ed;min-height:100%;
+  position:relative;
+}
+.fl-title-page::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(
+    0deg,transparent,transparent 27px,rgba(139,99,67,0.06) 28px);
+  z-index:0;
+}
+.fl-title-page>*{position:relative;z-index:1}
+.fl-header{border-bottom:4px solid #c9881a}
+.fl-open-btn-row{
+  background:#3e2005;padding:16px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;
+}
+
+/* ── SETUP WIZARD ─────────────────────────────────────────── */
+.wiz-wrap{width:100%;max-width:560px;margin:0 auto;padding:20px 0}
+.wiz-step{display:none;flex-direction:column;gap:14px}
+.wiz-step.active{display:flex}
+.wiz-title{font-family:var(--h);font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:2px}
+.wiz-sub{font-family:var(--b);font-size:0.85rem;color:var(--ink3);font-style:italic}
+.wiz-field label{font-family:var(--h);font-size:1rem;font-weight:700;color:var(--ink2);display:block;margin-bottom:6px}
+.wiz-inp{
+  width:100%;font-family:var(--h);font-size:1.2rem;color:var(--ink);
+  background:rgba(255,255,255,0.5);border:2px solid var(--ink2);border-radius:2px;
+  padding:8px 12px;outline:none;
+}
+.wiz-inp:focus{border-color:var(--ink);background:rgba(255,255,255,0.8)}
+.age-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.age-btn{
+  font-family:var(--h);font-size:1rem;font-weight:700;
+  background:transparent;border:2px solid var(--ink2);color:var(--ink);
+  padding:8px 6px;border-radius:2px;cursor:pointer;text-align:center;
+  transition:all 0.12s;
+}
+.age-btn:hover{background:var(--paper2)}
+.age-btn.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.confirm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.confirm-item{background:rgba(255,255,255,0.4);border:1.5px solid rgba(44,26,14,0.2);border-radius:2px;padding:10px 14px}
+.confirm-label{font-family:var(--h);font-size:0.82rem;color:var(--ink3);margin-bottom:3px}
+.confirm-val{font-family:var(--h);font-size:1.1rem;font-weight:700;color:var(--ink)}
+.cards-row{display:flex;align-items:center;gap:10px}
+.cards-num{font-family:var(--h);font-size:2rem;font-weight:700;color:var(--ink);min-width:36px;text-align:center}
+.wiz-note{font-family:var(--b);font-size:0.8rem;color:var(--ink3);font-style:italic}
+.wiz-error{font-family:var(--b);font-size:0.85rem;color:var(--red);display:none;margin-top:-6px}
+/* loading screen */
+#s-loading{align-items:center;justify-content:center;text-align:center;gap:16px}
+.load-spin{width:48px;height:48px;border:4px solid rgba(44,26,14,0.15);border-top-color:var(--gold);border-radius:50%;animation:spin 0.9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-msg{font-family:var(--h);font-size:1.2rem;color:var(--ink2)}
+.load-err{font-family:var(--b);font-size:0.88rem;color:var(--red);max-width:400px;display:none}
+/* team turn banner in play screen */
+.team-banner{
+  flex-shrink:0;padding:6px 20px;text-align:center;
+  font-family:var(--h);font-size:1rem;font-weight:700;color:var(--paper);
+  transition:background 0.3s;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ TITLE ══════════════════ -->
+<div id="s-title" class="screen active">
+  <div class="fl-title-page">
+<!-- HEADER -->
+  <div class="fl-header">
+    <div class="fl-header-ornament">✦  ✦  ✦</div>
+    <div class="fl-header-title">Chitragupt Ka Khata</div>
+    <div class="fl-header-hindi">चित्रगुप्त का खाता</div>
+    <div class="fl-header-tag">Your life. On record. In your words.</div>
+    <div class="fl-header-sparsh">A facilitated team game for advance care planning  ·  Sparsh Behavioral Lab, Sparsh Hospice, Hyderabad</div>
+  </div>
+
+  <!-- CHARACTERS -->
+  <div class="fl-characters">
+
+    <!-- YAMRAJ -->
+    <div class="fl-char-panel">
+      <div class="fl-char-svg-wrap">
+        <svg width="90" height="120" viewBox="0 0 232 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="f-yb" cx="42%" cy="38%" r="55%"><stop offset="0%" stop-color="#c9a0d8"/><stop offset="60%" stop-color="#a060b8"/><stop offset="100%" stop-color="#7840a0"/></radialGradient>
+            <radialGradient id="f-yl" cx="45%" cy="30%" r="60%"><stop offset="0%" stop-color="#6030a0"/><stop offset="100%" stop-color="#401870"/></radialGradient>
+            <radialGradient id="f-my" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#ffe060"/><stop offset="100%" stop-color="#c09010"/></radialGradient>
+          </defs>
+          <ellipse cx="116" cy="390" rx="68" ry="14" fill="#8b4513" opacity="0.18"/>
+          <rect x="93" y="340" width="13" height="52" rx="6" fill="#401870"/>
+          <rect x="126" y="340" width="13" height="52" rx="6" fill="#401870"/>
+          <ellipse cx="99" cy="393" rx="14" ry="8" fill="#a060b8"/>
+          <path d="M86,392 Q88,382 99,386 Q110,390 112,392 Q114,396 108,398 Q98,400 90,396 Z" fill="#a060b8"/>
+          <ellipse cx="85" cy="390" rx="6" ry="5" fill="#c080d8"/>
+          <ellipse cx="133" cy="393" rx="14" ry="8" fill="#a060b8"/>
+          <path d="M120,392 Q122,382 133,386 Q144,390 146,392 Q148,396 142,398 Q132,400 124,396 Z" fill="#a060b8"/>
+          <ellipse cx="147" cy="390" rx="6" ry="5" fill="#c080d8"/>
+          <ellipse cx="116" cy="290" rx="90" ry="75" fill="url(#f-yl)"/>
+          <path d="M42,300 Q60,320 116,325 Q172,320 190,300" fill="none" stroke="#5040a0" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <path d="M46,240 Q60,230 80,235 Q70,260 68,295 Q66,320 70,340 L55,340 Q50,310 52,280 Z" fill="#5040a0" opacity="0.85"/>
+          <ellipse cx="116" cy="220" rx="82" ry="80" fill="url(#f-yb)"/>
+          <ellipse cx="95" cy="188" rx="28" ry="20" fill="#e0b0f0" opacity="0.22"/>
+          <path d="M40,195 Q35,188 40,182 Q46,176 50,183 Q48,190 42,192 Z" fill="#b0a0c0"/>
+          <path d="M36,210 Q30,202 35,196 Q41,190 45,197 Q44,205 38,207 Z" fill="#a090b0"/>
+          <path d="M192,195 Q197,188 192,182 Q186,176 182,183 Q184,190 190,192 Z" fill="#b0a0c0"/>
+          <path d="M196,210 Q202,202 197,196 Q191,190 187,197 Q188,205 194,207 Z" fill="#a090b0"/>
+          <path d="M72,148 Q52,110 60,72 Q66,50 78,60 Q88,72 82,100 Q78,124 72,148 Z" fill="#d060b0"/>
+          <path d="M160,148 Q180,110 172,72 Q166,50 154,60 Q144,72 150,100 Q154,124 160,148 Z" fill="#d060b0"/>
+          <ellipse cx="116" cy="154" rx="36" ry="14" fill="#c09010"/>
+          <path d="M80,154 Q82,120 116,108 Q150,120 152,154 Z" fill="#ffe040"/>
+          <ellipse cx="116" cy="154" rx="36" ry="14" fill="#c09010" opacity="0.4"/>
+          <polygon points="116,102 120,112 112,112" fill="#e8c040"/>
+          <path d="M88,186 Q96,180 106,184" fill="none" stroke="#2c1020" stroke-width="3" stroke-linecap="round"/>
+          <path d="M126,184 Q136,180 144,186" fill="none" stroke="#2c1020" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="97" cy="196" rx="13" ry="13" fill="white"/>
+          <ellipse cx="135" cy="196" rx="13" ry="13" fill="white"/>
+          <ellipse cx="99" cy="197" rx="8" ry="9" fill="#2c1020"/>
+          <ellipse cx="137" cy="197" rx="8" ry="9" fill="#2c1020"/>
+          <ellipse cx="96" cy="194" rx="3" ry="3" fill="white"/>
+          <ellipse cx="134" cy="194" rx="3" ry="3" fill="white"/>
+          <ellipse cx="97" cy="196" rx="13" ry="13" fill="none" stroke="#2c1020" stroke-width="1.5"/>
+          <ellipse cx="135" cy="196" rx="13" ry="13" fill="none" stroke="#2c1020" stroke-width="1.5"/>
+          <path d="M116,228 Q95,224 76,228 Q58,234 54,248 Q52,260 64,262 Q76,264 84,254 Q88,246 80,240 Q72,236 68,242" fill="none" stroke="#100810" stroke-width="9" stroke-linecap="round"/>
+          <path d="M116,228 Q95,224 76,228 Q58,234 54,248 Q52,260 64,262 Q76,264 84,254 Q88,246 80,240 Q72,236 68,242" fill="none" stroke="#1a1028" stroke-width="6" stroke-linecap="round"/>
+          <path d="M116,228 Q137,224 156,228 Q174,234 178,248 Q180,260 168,262 Q156,264 148,254 Q144,246 152,240 Q160,236 164,242" fill="none" stroke="#100810" stroke-width="9" stroke-linecap="round"/>
+          <path d="M116,228 Q137,224 156,228 Q174,234 178,248 Q180,260 168,262 Q156,264 148,254 Q144,246 152,240 Q160,236 164,242" fill="none" stroke="#1a1028" stroke-width="6" stroke-linecap="round"/>
+          <ellipse cx="116" cy="228" rx="6" ry="4" fill="#2a1838"/>
+          <path d="M186,280 Q195,300 198,320 Q200,340 196,360" fill="none" stroke="#8b6010" stroke-width="3" stroke-linecap="round"/>
+          <path d="M186,280 Q195,300 198,320 Q200,340 196,360" fill="none" stroke="#e8c040" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,4"/>
+          <ellipse cx="196" cy="372" rx="22" ry="25" fill="url(#f-my)"/>
+          <ellipse cx="196" cy="372" rx="22" ry="25" fill="none" stroke="#c09010" stroke-width="2"/>
+          <ellipse cx="190" cy="360" rx="8" ry="7" fill="#ffe880" opacity="0.4"/>
+          <ellipse cx="196" cy="394" rx="8" ry="5" fill="#c09010"/>
+          <ellipse cx="42" cy="265" rx="14" ry="12" fill="#7840a0"/>
+        </svg>
+      </div>
+      <div class="fl-char-name">Yamraj</div>
+      <div class="fl-char-role">याम राज  ·  Lord of Dharma</div>
+      <div class="fl-char-desc">
+        In Hindu mythology, Yamraj is the keeper of cosmic justice — not a frightening figure, but a patient, meticulous one. He maintains the order of things. He does not arrive early. He does not arrive late. And he never cancels.
+      </div>
+      <div class="fl-char-quote">"He has had a calendar invite for you since the day you were born. The subject: Final Meeting. The question is whether you have prepared for it."</div>
+    </div>
+
+    <!-- CHITRAGUPT -->
+    <div class="fl-char-panel">
+      <div class="fl-char-svg-wrap">
+        <svg width="90" height="120" viewBox="0 0 236 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="f-cb" cx="42%" cy="38%" r="55%"><stop offset="0%" stop-color="#f0c080"/><stop offset="55%" stop-color="#d4882a"/><stop offset="100%" stop-color="#a05810"/></radialGradient>
+            <radialGradient id="f-cl" cx="45%" cy="30%" r="60%"><stop offset="0%" stop-color="#c06820"/><stop offset="100%" stop-color="#8b3a10"/></radialGradient>
+            <radialGradient id="f-lr" cx="30%" cy="25%" r="65%"><stop offset="0%" stop-color="#d46040"/><stop offset="100%" stop-color="#8b2a10"/></radialGradient>
+          </defs>
+          <ellipse cx="118" cy="385" rx="64" ry="13" fill="#8b4513" opacity="0.18"/>
+          <rect x="96" y="335" width="13" height="52" rx="6" fill="#8b3a10"/>
+          <rect x="129" y="335" width="13" height="52" rx="6" fill="#8b3a10"/>
+          <ellipse cx="102" cy="388" rx="14" ry="8" fill="#c06820"/>
+          <path d="M89,387 Q91,377 102,381 Q113,385 115,387 Q117,391 111,393 Q101,395 93,391 Z" fill="#c06820"/>
+          <ellipse cx="88" cy="385" rx="6" ry="5" fill="#e08830"/>
+          <ellipse cx="136" cy="388" rx="14" ry="8" fill="#c06820"/>
+          <path d="M123,387 Q125,377 136,381 Q147,385 149,387 Q151,391 145,393 Q135,395 127,391 Z" fill="#c06820"/>
+          <ellipse cx="150" cy="385" rx="6" ry="5" fill="#e08830"/>
+          <ellipse cx="118" cy="285" rx="86" ry="72" fill="url(#f-cl)"/>
+          <path d="M46,294 Q70,312 118,318 Q166,312 190,294" fill="none" stroke="#7a2e08" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+          <ellipse cx="118" cy="214" rx="80" ry="77" fill="url(#f-cb)"/>
+          <ellipse cx="97" cy="182" rx="26" ry="18" fill="#ffe0a0" opacity="0.22"/>
+          <path d="M44,188 Q37,179 43,172 Q50,166 55,174 Q52,182 45,185 Z" fill="#5c3010"/>
+          <path d="M40,205 Q33,196 39,189 Q46,182 51,190 Q49,199 42,202 Z" fill="#4a2808"/>
+          <path d="M58,160 Q55,150 62,145 Q69,142 72,150 Q70,158 63,160 Z" fill="#5c3010"/>
+          <path d="M192,188 Q199,179 193,172 Q186,166 181,174 Q184,182 191,185 Z" fill="#5c3010"/>
+          <path d="M196,205 Q203,196 197,189 Q190,182 185,190 Q187,199 194,202 Z" fill="#4a2808"/>
+          <path d="M178,158 Q181,148 175,143 Q168,140 165,148 Q167,156 174,158 Z" fill="#5c3010"/>
+          <ellipse cx="118" cy="150" rx="32" ry="12" fill="#a06010"/>
+          <path d="M86,150 Q88,122 118,112 Q148,122 150,150 Z" fill="#e8a020"/>
+          <ellipse cx="118" cy="150" rx="32" ry="12" fill="#c09010" opacity="0.35"/>
+          <polygon points="118,106 122,116 114,116" fill="#e8c040"/>
+          <polygon points="102,110 105,120 99,120" fill="#c09010"/>
+          <polygon points="134,110 137,120 131,120" fill="#c09010"/>
+          <line x1="99" y1="196" x2="111" y2="196" stroke="#5c3010" stroke-width="2.5"/>
+          <circle cx="88" cy="196" r="17" fill="none" stroke="#5c3010" stroke-width="3"/>
+          <circle cx="88" cy="196" r="17" fill="#e8f4f0" opacity="0.25"/>
+          <circle cx="122" cy="196" r="17" fill="none" stroke="#5c3010" stroke-width="3"/>
+          <circle cx="122" cy="196" r="17" fill="#e8f4f0" opacity="0.25"/>
+          <path d="M71,194 Q58,192 50,196" fill="none" stroke="#5c3010" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M139,194 Q152,192 160,196" fill="none" stroke="#5c3010" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="88" cy="195" rx="10" ry="11" fill="white"/>
+          <ellipse cx="122" cy="195" rx="10" ry="11" fill="white"/>
+          <ellipse cx="90" cy="196" rx="7" ry="8" fill="#3e2005"/>
+          <ellipse cx="124" cy="196" rx="7" ry="8" fill="#3e2005"/>
+          <ellipse cx="88" cy="193" rx="2.5" ry="2.5" fill="white"/>
+          <ellipse cx="122" cy="193" rx="2.5" ry="2.5" fill="white"/>
+          <path d="M74,182 Q82,176 92,180" fill="none" stroke="#3e2005" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M112,180 Q122,176 130,182" fill="none" stroke="#3e2005" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M104,218 Q96,214 88,218 Q80,224 82,232 Q88,236 96,230 Q100,224 98,218" fill="none" stroke="#3e2005" stroke-width="6" stroke-linecap="round"/>
+          <path d="M116,218 Q124,214 132,218 Q140,224 138,232 Q132,236 124,230 Q120,224 122,218" fill="none" stroke="#3e2005" stroke-width="6" stroke-linecap="round"/>
+          <path d="M104,218 Q110,222 116,218" fill="none" stroke="#3e2005" stroke-width="5" stroke-linecap="round"/>
+          <path d="M47,175 Q52,162 58,152 Q64,140 70,130 Q76,118 72,108 Q68,98 62,104 Q58,112 60,124 Q62,136 58,148 Q54,160 47,175" fill="#f0e0a0" stroke="#c9a030" stroke-width="0.8"/>
+          <path d="M47,175 Q45,178 48,179 Q52,180 54,177" fill="#8b6010"/>
+          <rect x="148" y="200" width="68" height="86" rx="4" fill="url(#f-lr)"/>
+          <rect x="148" y="200" width="10" height="86" rx="2" fill="#6a1a08"/>
+          <rect x="158" y="206" width="52" height="74" rx="1" fill="#f5edd8"/>
+          <line x1="162" y1="216" x2="206" y2="216" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="224" x2="206" y2="224" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="232" x2="206" y2="232" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="240" x2="206" y2="240" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="248" x2="206" y2="248" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="256" x2="206" y2="256" stroke="#8b6343" stroke-width="0.7"/>
+          <path d="M164,215 Q170,213 176,215 Q182,217 188,214" fill="none" stroke="#3e2005" stroke-width="0.8"/>
+          <path d="M164,223 Q172,221 180,223 Q188,225 196,222" fill="none" stroke="#3e2005" stroke-width="0.8"/>
+          <path d="M164,231 Q169,229 174,231 Q180,233 186,230" fill="none" stroke="#3e2005" stroke-width="0.8"/>
+          <ellipse cx="44" cy="268" rx="12" ry="10" fill="#7840a0" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="fl-char-name">Chitragupt</div>
+      <div class="fl-char-role">चित्रगुप्त  ·  The Divine Scribe</div>
+      <div class="fl-char-desc">
+        Chitragupt is Yamraj's accountant — the keeper of the khata, the record of every soul's deeds and wishes. He is meticulous, slightly flustered (there are a lot of souls), and takes his register very seriously.
+      </div>
+      <div class="fl-char-quote">"Your khata already exists. This game gives you the chance to add your own entry — in your own words — before someone else writes it for you."</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <!-- WHAT IS A KHATA -->
+    <div class="fl-section-head">
+      <div class="fl-section-icon" style="background:#c9881a">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" fill="none" stroke="#fff" stroke-width="1.5"/><line x1="8" y1="9" x2="16" y2="9" stroke="#fff" stroke-width="1.5"/><line x1="8" y1="12" x2="16" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#fff" stroke-width="1.5"/></svg>
+      </div>
+      <div class="fl-section-title">What is a Khata?</div>
+    </div>
+    <div class="fl-section-body">
+      Every Indian household once had a <em>khata</em> — the shopkeeper's ledger where every transaction was recorded. Nothing forgotten. The word carries three meanings, and all three are at the heart of this game:
+    </div>
+    <div class="fl-khata-box">
+      <ul class="fl-khata-meanings">
+        <li><span class="fl-meaning-num">1.</span>The <strong>account book</strong> — every act of your life, recorded since the day you were born.</li>
+        <li><span class="fl-meaning-num">2.</span>The <strong>tab</strong> — what is owed, what has been given, what remains unsettled.</li>
+        <li><span class="fl-meaning-num">3.</span>The <strong>mistake</strong> — <em>yeh meri khata hai.</em> The things you would like to address before the final accounting.</li>
+      </ul>
+    </div>
+
+    <div class="fl-divider"></div>
+
+    <!-- LIVING WILL -->
+    <div class="fl-section-head">
+      <div class="fl-section-icon" style="background:#b84a2f">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="fl-section-title">What is a Living Will?</div>
+    </div>
+
+    <div class="fl-qa-grid">
+      <div class="fl-qa-card">
+        <div class="fl-qa-q">What is it?</div>
+        <div class="fl-qa-a">A Living Will — also called an Advance Medical Directive (AMD) — is a simple document where you write down your medical wishes for a time when you may not be able to speak for yourself. It answers: <em>if I am very ill and cannot decide, what do I want?</em></div>
+      </div>
+      <div class="fl-qa-card">
+        <div class="fl-qa-q">Why does it matter?</div>
+        <div class="fl-qa-a">Without a Living Will, your family must guess what you would want — often in the middle of a crisis, when they are already grieving. Families argue. Doctors default to doing everything. The result is often more suffering, not less. Your Living Will is the gift of clarity.</div>
+      </div>
+      <div class="fl-qa-card">
+        <div class="fl-qa-q">Is it legal in India?</div>
+        <div class="fl-qa-a">Yes. The Supreme Court of India made it legal in 2018 and simplified the process in 2023. You do not need a lawyer or a magistrate. Two witnesses and a notary are enough. Any adult with decision-making capacity can write one.</div>
+      </div>
+      <div class="fl-qa-card">
+        <div class="fl-qa-q">Who needs one?</div>
+        <div class="fl-qa-a">Everyone. Not just the elderly or the ill. Accidents and sudden illness can happen at any age. Writing a Living Will is not a preparation for death — it is an act of love for the people who will have to make decisions for you.</div>
+      </div>
+    </div>
+
+    <div class="fl-legal-box">
+      <div class="fl-legal-head">Important: What Indian law says</div>
+      <div class="fl-legal-body">
+        A valid AMD takes legal priority over family wishes. Doctors who follow a patient's AMD in good faith are protected from prosecution (Supreme Court, 2018). Withholding a ventilator per a patient's AMD is <strong>not</strong> euthanasia — it is allowing natural death. Pain relief — even strong medication — is legally permitted when comfort is the primary goal.
+      </div>
+    </div>
+
+    <div class="fl-divider"></div>
+
+    <!-- WHAT TO INCLUDE -->
+    <div class="fl-section-head">
+      <div class="fl-section-icon" style="background:#2e7d7a">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="fl-section-title">What to write in your Living Will</div>
+    </div>
+
+    <div class="fl-steps">
+      <div class="step">
+        <div class="fl-step-num">1</div>
+        <div class="fl-step-text"><strong>Your values.</strong> What matters most to you — being free from pain, being at home, staying conscious, having your rituals observed? Start here, before any medical decisions.</div>
+      </div>
+      <div class="step">
+        <div class="fl-step-num">2</div>
+        <div class="fl-step-text"><strong>Your treatment preferences.</strong> Do you want CPR if your heart stops? A ventilator if you cannot breathe? A feeding tube? These are medical procedures — you have the right to say yes or no to each one.</div>
+      </div>
+      <div class="step">
+        <div class="fl-step-num">3</div>
+        <div class="fl-step-text"><strong>Your healthcare representative.</strong> Name one person who knows your wishes and will speak for you. Make sure they have agreed, and make sure the rest of your family knows who they are.</div>
+      </div>
+      <div class="step">
+        <div class="fl-step-num">4</div>
+        <div class="fl-step-text"><strong>Where to keep it.</strong> Give a copy to your doctor, one to your healthcare representative, and one to a trusted family member. An AMD no one can find does not protect you.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAGLINE STRIP -->
+  <div class="fl-tagline-strip">
+    <div>
+      <div class="fl-tagline-main">"Apni baat, apne haath."</div>
+      <div class="fl-tagline-en">Your story, in your own hands.</div>
+    </div>
+    <div class="fl-tagline-contact">
+      Sparsh Hospice, Hyderabad<br>
+      Sparsh Behavioral Lab<br>
+      <span style="color:#c9881a">sparshbehaviorallab.org</span>
+    </div>
+  </div>
+
+  <!-- ARTIFACT FOOTER -->
+  <div class="fl-art-footer">
+    <!-- diya -->
+    <svg width="24" height="28" viewBox="0 0 28 32"><ellipse cx="14" cy="28" rx="12" ry="5" fill="#c27a50"/><ellipse cx="14" cy="24" rx="11" ry="4" fill="#d4956a"/><path d="M14,16 Q12,10 14,6 Q16,10 18,6 Q16,10 14,16" fill="#e8c060"/><ellipse cx="14" cy="16" rx="3.5" ry="4" fill="#e8a020" opacity="0.9"/></svg>
+    <!-- conch -->
+    <svg width="24" height="30" viewBox="0 0 32 36"><ellipse cx="16" cy="22" rx="14" ry="20" fill="#f5f0e0" stroke="#d4c090" stroke-width="1"/><path d="M8,8 Q16,4 24,10 Q28,16 24,22 Q20,28 16,28 Q10,28 6,22 Q2,16 8,8" fill="#ede0c0"/><path d="M16,28 Q14,32 12,34" fill="none" stroke="#d4c090" stroke-width="1.5"/></svg>
+    <!-- marigold -->
+    <svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="10" fill="#e8a020"/><ellipse cx="14" cy="6" rx="3.5" ry="5" fill="#f0b030"/><ellipse cx="20" cy="8" rx="3.5" ry="5" fill="#f0b030" transform="rotate(36,20,8)"/><ellipse cx="22" cy="14" rx="3.5" ry="5" fill="#f0b030" transform="rotate(72,22,14)"/><ellipse cx="20" cy="20" rx="3.5" ry="5" fill="#f0b030" transform="rotate(108,20,20)"/><ellipse cx="14" cy="22" rx="3.5" ry="5" fill="#f0b030" transform="rotate(144,14,22)"/><ellipse cx="8" cy="20" rx="3.5" ry="5" fill="#f0b030" transform="rotate(180,8,20)"/><ellipse cx="6" cy="14" rx="3.5" ry="5" fill="#f0b030" transform="rotate(216,6,14)"/><ellipse cx="8" cy="8" rx="3.5" ry="5" fill="#f0b030" transform="rotate(252,8,8)"/><circle cx="14" cy="14" r="5" fill="#e8c060"/></svg>
+    <!-- inkpot quill -->
+    <svg width="26" height="30" viewBox="0 0 26 34"><ellipse cx="13" cy="28" rx="10" ry="6" fill="#2c1a0e"/><ellipse cx="13" cy="24" rx="9" ry="5" fill="#3e2005"/><path d="M13,20 Q9,13 7,6 Q4,0 9,0 Q12,0 13,5 Q14,10 13,20" fill="#f0e0a0"/><path d="M13,20 Q14,14 15,8" fill="none" stroke="#8b4513" stroke-width="1.2"/></svg>
+    <!-- lotus -->
+    <svg width="28" height="28" viewBox="0 0 28 30"><ellipse cx="14" cy="26" rx="10" ry="4" fill="#6aaa6a" opacity="0.7"/><ellipse cx="14" cy="16" rx="6" ry="8" fill="#e8708a"/><ellipse cx="7" cy="19" rx="5" ry="7" fill="#e87090" transform="rotate(-22,7,19)"/><ellipse cx="21" cy="19" rx="5" ry="7" fill="#e87090" transform="rotate(22,21,19)"/><ellipse cx="3" cy="23" rx="4" ry="6" fill="#f090a8" transform="rotate(-38,3,23)"/><ellipse cx="25" cy="23" rx="4" ry="6" fill="#f090a8" transform="rotate(38,25,23)"/><circle cx="14" cy="14" r="5" fill="#e8c060"/></svg>
+    <!-- pigeon -->
+    <svg width="32" height="22" viewBox="0 0 44 28"><ellipse cx="20" cy="14" rx="16" ry="10" fill="#c8c0b8"/><ellipse cx="11" cy="11" rx="9" ry="7" fill="#d0c8c0"/><ellipse cx="6" cy="9" rx="4.5" ry="3.5" fill="#d0c8c0"/><ellipse cx="6" cy="8.5" rx="2" ry="2" fill="#2c1a0e"/><circle cx="5.5" cy="8" r="0.7" fill="#fff" opacity="0.7"/><path d="M2,9 Q1,8 2,7 Q3,6 5,7" fill="#d4a060"/><path d="M30,11 Q40,5 44,8 Q40,12 30,14" fill="#a8a0a0"/></svg>
+  </div>
+
+    <!-- OPEN BUTTON ROW -->
+    <div class="fl-open-btn-row">
+      <div>
+        <div style="font-family:var(--h);font-size:1.05rem;font-weight:700;color:#c9881a">Ready to play?</div>
+        <div style="font-family:var(--b);font-size:0.8rem;color:#8b7050;margin-top:2px">A facilitated team game · Sparsh Behavioral Lab</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn" style="background:#c9881a;border-color:#c9881a;color:#fff;font-size:1.1rem;padding:10px 28px" onclick="show('s-about')">Open the Khata →</button>
+        <button class="btn sm out" style="color:#ede0c0;border-color:#8b7050" onclick="toggleFS()">⛶ Full Screen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ ABOUT ══════════════════ -->
+<div id="s-about" class="screen">
+  <div class="scroll">
+    <div class="about-inner sketch fade-in" style="margin:20px auto">
+      <div class="about-h">What is a Khata?</div>
+      <div class="about-p">In every Indian household, there was once a <em>khata</em> — the shopkeeper's ledger, the family account book. Nothing was forgotten. Every debt, every credit, every favour given and received.</div>
+      <div class="about-p">Chitragupt — the divine scribe of Hindu cosmology, accountant to Yamraj, keeper of all earthly records — has one too. Your khata. Every act of your life, recorded since the day you arrived.</div>
+      <div class="khata-box">
+        <div style="font-family:var(--h);font-size:1.1rem;font-weight:700;color:var(--plum);margin-bottom:10px">Khata (खाता) — three meanings at once:</div>
+        <ul class="khata-meaning">
+          <li><strong>The account book</strong> — every transaction of your life, recorded.</li>
+          <li><strong>The tab</strong> — what is owed, what has been given, what remains unsettled.</li>
+          <li><strong>The mistake</strong> — <em>yeh meri khata hai</em>. The things you'd like to address before the final accounting.</li>
+        </ul>
+      </div>
+      <div class="about-p">This game is not about dying. It is about what goes into the khata while you are still writing it — what you value, what you want, who you trust, and what you want your family to know.</div>
+      <div class="tagline-box">
+        <div class="q">"Apni baat, apne haath."</div>
+        <div class="e">Your story, in your own hands.</div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn" onclick="show('s-setup')">Set Up the Game →</button>
+        <button class="btn out" onclick="show('s-title')">← Back</button>
+      </div>
+      <!-- artifact strip -->
+      <div style="margin-top:20px;padding-top:16px;border-top:1px dashed rgba(139,99,67,0.3);display:flex;justify-content:center;gap:20px;opacity:0.55">
+        <svg width="28" height="32" viewBox="0 0 28 32"><ellipse cx="14" cy="28" rx="12" ry="5" fill="#c27a50"/><ellipse cx="14" cy="24" rx="11" ry="4" fill="#d4956a"/><path d="M14,16 Q12,10 14,6 Q16,10 18,6 Q16,10 14,16" fill="#e8c060"/><ellipse cx="14" cy="16" rx="3.5" ry="4" fill="#e8a020" opacity="0.8"/></svg>
+        <svg width="32" height="36" viewBox="0 0 32 36"><ellipse cx="16" cy="22" rx="14" ry="20" fill="#f5f0e0" stroke="#d4c090" stroke-width="1"/><path d="M8,8 Q16,4 24,10 Q28,16 24,22 Q20,28 16,28 Q10,28 6,22 Q2,16 8,8" fill="#ede0c0"/><path d="M10,8 Q16,4 22,8" fill="none" stroke="#c9881a" stroke-width="1.2"/><path d="M16,28 Q14,32 12,34" fill="none" stroke="#d4c090" stroke-width="1.5"/></svg>
+        <svg width="30" height="34" viewBox="0 0 30 34"><circle cx="15" cy="18" r="12" fill="#e8a020"/><ellipse cx="15" cy="8" rx="4" ry="6" fill="#f0b030"/><ellipse cx="22" cy="10" rx="4" ry="6" fill="#f0b030" transform="rotate(36,22,10)"/><ellipse cx="26" cy="17" rx="4" ry="6" fill="#f0b030" transform="rotate(72,26,17)"/><ellipse cx="22" cy="24" rx="4" ry="6" fill="#f0b030" transform="rotate(108,22,24)"/><ellipse cx="15" cy="26" rx="4" ry="6" fill="#f0b030" transform="rotate(144,15,26)"/><ellipse cx="8" cy="24" rx="4" ry="6" fill="#f0b030" transform="rotate(180,8,24)"/><ellipse cx="4" cy="17" rx="4" ry="6" fill="#f0b030" transform="rotate(216,4,17)"/><ellipse cx="8" cy="10" rx="4" ry="6" fill="#f0b030" transform="rotate(252,8,10)"/><circle cx="15" cy="18" r="5" fill="#e8c060"/></svg>
+        <svg width="26" height="34" viewBox="0 0 26 34"><ellipse cx="13" cy="22" rx="10" ry="6" fill="#2c1a0e"/><ellipse cx="13" cy="18" rx="9" ry="5" fill="#3e2005"/><path d="M13,14 Q9,8 7,2 Q4,0 8,0 Q11,0 13,4 Q15,8 13,14" fill="#f0e0a0"/><path d="M13,14 Q14,10 15,6" fill="none" stroke="#8b4513" stroke-width="1.2"/></svg>
+        <svg width="24" height="36" viewBox="0 0 24 36"><rect x="10" y="6" width="5" height="60" rx="1.5" fill="#c0c8d0" stroke="#909098" stroke-width="0.5"/><path d="M10,6 Q12.5,2 15,6" fill="#c0c8d0"/><rect x="6" y="64" width="14" height="4" rx="1.5" fill="#c9881a"/><rect x="9" y="68" width="7" height="14" rx="1.5" fill="#8b4513"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SETUP ══════════════════ -->
+<!-- ══════════════════ LOADING ══════════════════ -->
+<div id="s-loading" class="screen">
+  <div class="load-spin"></div>
+  <div class="load-msg" id="load-msg">Loading questions from Chitragupt's register...</div>
+  <div class="load-err" id="load-err"></div>
+  <button class="btn sm out" id="load-retry" style="display:none" onclick="loadQuestions()">Retry</button>
+</div>
+
+<!-- ══════════════════ SETUP WIZARD ══════════════════ -->
+<div id="s-setup" class="screen">
+  <div class="sbar" style="background:var(--ink)">
+    <div style="font-family:var(--h);font-size:1rem;color:var(--paper)">Chitragupt Ka Khata</div>
+    <div style="font-family:var(--b);font-size:0.8rem;color:rgba(250,245,237,0.6)">Game Setup</div>
+    <div style="font-family:var(--h);font-size:0.85rem;color:var(--gold)" id="wiz-step-lbl">Step 1 of 5</div>
+  </div>
+  <div class="game-area" style="overflow-y:auto">
+    <div class="wiz-wrap">
+
+      <!-- STEP 1: Moderator name -->
+      <div class="wiz-step active" id="wiz-1">
+        <div class="wiz-title">Welcome, Moderator</div>
+        <div class="wiz-sub">Let's set up Chitragupt's register before the game begins.</div>
+        <div class="wiz-field">
+          <label>Your name (the person running the game)</label>
+          <input class="wiz-inp" id="w-mod" placeholder="e.g. Dr. Reema" maxlength="40">
+          <div class="wiz-error" id="e-mod">Please enter your name to continue.</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn" onclick="wizNext(1)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Age group -->
+      <div class="wiz-step" id="wiz-2">
+        <div class="wiz-title">Who is in the room?</div>
+        <div class="wiz-sub">Select the age group that best describes most of today's players.</div>
+        <div class="age-grid" id="age-grid">
+          <button class="age-btn" data-age="20–32" onclick="selectAge(this)">20–32</button>
+          <button class="age-btn" data-age="33–45" onclick="selectAge(this)">33–45</button>
+          <button class="age-btn" data-age="46–55" onclick="selectAge(this)">46–55</button>
+          <button class="age-btn" data-age="56–65" onclick="selectAge(this)">56–65</button>
+          <button class="age-btn" data-age="66–75" onclick="selectAge(this)">66–75</button>
+          <button class="age-btn" data-age="75+" onclick="selectAge(this)">75+</button>
+        </div>
+        <div class="wiz-error" id="e-age">Please select an age group.</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn out sm" onclick="wizBack(2)">← Back</button>
+          <button class="btn" onclick="wizNext(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Player count -->
+      <div class="wiz-step" id="wiz-3">
+        <div class="wiz-title">How many people are here today?</div>
+        <div class="wiz-sub">Include yourself as the moderator in the total count.</div>
+        <div class="wiz-field">
+          <label>Total number of people (including moderator)</label>
+          <input class="wiz-inp" id="w-total" type="number" min="3" max="30" placeholder="e.g. 10">
+          <div class="wiz-error" id="e-total">Please enter a number between 3 and 30.</div>
+        </div>
+        <div class="wiz-note" id="team-preview" style="margin-top:-4px"></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn out sm" onclick="wizBack(3)">← Back</button>
+          <button class="btn" onclick="wizNext(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Team names + cards per deck -->
+      <div class="wiz-step" id="wiz-4">
+        <div class="wiz-title">Name your teams</div>
+        <div class="wiz-sub">Mix the seats — don't put families together. Name yourselves after a comfort food.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="wiz-field">
+            <label style="color:var(--red)">Team A</label>
+            <input class="wiz-inp" id="w-ta" placeholder="e.g. Dal Chawal" maxlength="20">
+          </div>
+          <div class="wiz-field">
+            <label style="color:var(--teal)">Team B</label>
+            <input class="wiz-inp" id="w-tb" placeholder="e.g. Chai Biscuit" maxlength="20">
+          </div>
+        </div>
+        <div class="wiz-field" style="margin-top:4px">
+          <label>Cards per team per round <span id="cards-default-note" style="font-weight:400;color:var(--ink3)"></span></label>
+          <div class="cards-row">
+            <button class="btn sm out" onclick="adjCards(-1)">−</button>
+            <div class="cards-num" id="w-cards-disp">3</div>
+            <button class="btn sm out" onclick="adjCards(1)">+</button>
+            <div style="font-family:var(--b);font-size:0.82rem;color:var(--ink3);margin-left:8px">cards per team<br>per part of the game</div>
+          </div>
+          <div class="wiz-note" style="margin-top:4px">Default = 1 card per player in each team. Use ± to adjust.</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn out sm" onclick="wizBack(4)">← Back</button>
+          <button class="btn" onclick="wizNext(4)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Confirm -->
+      <div class="wiz-step" id="wiz-5">
+        <div class="wiz-title">Ready to begin</div>
+        <div class="wiz-sub">Confirm the details below before Chitragupt opens the register.</div>
+        <div class="confirm-grid" id="confirm-grid"></div>
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button class="btn out sm" onclick="wizBack(5)">← Back</button>
+          <button class="btn lg gold" onclick="beginGame()">Open the Khata ✦</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PART INTRO ══════════════════ -->
+<div id="s-intro" class="screen">
+  <div class="sbar" id="ib-bar"></div>
+  <div class="intro-body">
+    <div class="intro-card sketch fade-in">
+      <div class="intro-pnum" id="i-pnum"></div>
+      <div class="intro-title" id="i-title"></div>
+      <div class="intro-sub" id="i-sub"></div>
+      <div class="intro-mech" id="i-mech"></div>
+      <div class="intro-tok" id="i-tok"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="i-btn" onclick="openSelectScreen()">Select Questions →</button>
+        <button class="btn sm out" onclick="goBack()">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SELECT ══════════════════ -->
+<div id="s-select" class="screen">
+  <div class="sbar" id="sel-bar"></div>
+  <div class="sel-header">
+    <div class="sel-h" id="sel-h"></div>
+    <div class="sel-note" id="sel-note"></div>
+  </div>
+  <div class="scroll">
+    <div class="q-list" id="q-list"></div>
+  </div>
+  <div class="sel-footer">
+    <div class="sel-count" id="sel-count">0 / 7 selected</div>
+    <button class="btn sm out" onclick="selectRandom7()">✦ Random 7</button>
+    <button class="btn" id="sel-go" onclick="confirmSel()" disabled>Play Selected</button>
+    <button class="btn sm out" onclick="show('s-intro')">← Back</button>
+  </div>
+</div>
+
+<!-- ══════════════════ PLAY ══════════════════ -->
+<div id="s-play" class="screen">
+  <div class="sbar" id="pb-bar"></div>
+  <div class="team-banner" id="team-banner"></div>
+  <div class="play-body">
+
+    <!-- Timer -->
+    <div class="timer-row" id="t-row" style="display:none">
+      <div class="timer-ring" id="t-ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(44,26,14,0.12)" stroke-width="6"/>
+          <circle id="t-arc" cx="36" cy="36" r="30" fill="none" stroke="#2c1a0e"
+            stroke-width="6" stroke-linecap="round"
+            stroke-dasharray="188.5" stroke-dashoffset="0"/>
+        </svg>
+        <div class="t-num" id="t-num">60</div>
+      </div>
+      <div class="timer-info">
+        <div class="t-lbl" id="t-lbl"></div>
+      </div>
+      <div class="timer-btns">
+        <button class="btn sm gold" id="t-start" onclick="startTimer()">▶ Start</button>
+        <button class="btn sm out" onclick="stopTimer()">■ Stop</button>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card-wrap">
+      <div class="card-inner sketch" id="card" onclick="flipCard()">
+        <div class="card-face">
+          <div class="c-suit" id="c-suit"></div>
+          <div class="c-q" id="c-q"></div>
+          <div class="c-tap" id="c-tap">tap card to reveal →</div>
+        </div>
+        <div class="card-face card-back">
+          <div id="c-back"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TF buttons -->
+    <div id="tf-row" style="display:none;flex-direction:column;align-items:center;gap:8px">
+      <div class="tf-btns">
+        <button class="btn lg sage" onclick="doTF('TRUE')">TRUE</button>
+        <button class="btn lg red" onclick="doTF('FALSE')">FALSE</button>
+      </div>
+    </div>
+    <div class="tf-reveal sketch" id="tf-reveal"></div>
+
+    <!-- Dil Se -->
+    <div class="dil-row" id="dil-row">
+      <div class="dil-lbl">❤ Dil Se token:</div>
+      <button class="dil-btn" id="d-a" onclick="award('A')">+1 <span id="d-a-n">Team A</span></button>
+      <button class="dil-btn" id="d-b" onclick="award('B')">+1 <span id="d-b-n">Team B</span></button>
+    </div>
+  </div>
+
+  <div class="play-nav">
+    <div class="q-ctr" id="q-ctr"></div>
+    <div class="nav-btns">
+      <button class="btn sm out" onclick="prevQ()">← Prev</button>
+      <button class="btn sm" id="next-btn" onclick="nextQ()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SCORE ══════════════════ -->
+<div id="s-score" class="screen">
+  <div class="scroll">
+    <div class="score-inner fade-in" style="margin:0 auto;padding:24px 20px">
+      <div class="score-eyebrow">Chitragupt has counted the tokens</div>
+      <div class="score-h">Khata Settled</div>
+      <div class="score-cards" id="score-cards"></div>
+      <div class="closing-box sketch">
+        <div class="closing-q">"Both teams won today.</div>
+        <div class="closing-p">One team just has more tokens. The real prize — which every person in this room has earned — is that your family now knows a little more about you than they did an hour ago."</div>
+      </div>
+      <div class="score-btns">
+        <button class="btn" onclick="restartGame()">Play Again</button>
+        <button class="btn out" onclick="show('s-title')">Back to Start</button>
+      </div>
+      <div style="margin-top:24px;display:flex;justify-content:center;gap:16px;opacity:0.45">
+        <svg width="24" height="28" viewBox="0 0 24 28"><ellipse cx="12" cy="24" rx="10" ry="4" fill="#c27a50"/><ellipse cx="12" cy="20" rx="9" ry="3.5" fill="#d4956a"/><path d="M12,13 Q10,8 12,5 Q14,8 16,5 Q14,8 12,13" fill="#e8c060"/><ellipse cx="12" cy="13" rx="3" ry="4" fill="#e8a020" opacity="0.8"/></svg>
+        <svg width="26" height="30" viewBox="0 0 26 30"><ellipse cx="13" cy="19" rx="11" ry="16" fill="#f5f0e0" stroke="#d4c090" stroke-width="1"/><path d="M6,7 Q13,3 20,8 Q24,14 20,19 Q16,24 13,24 Q8,24 4,18 Q0,13 6,7" fill="#ede0c0"/><path d="M13,24 Q11,27 10,29" fill="none" stroke="#d4c090" stroke-width="1.2"/></svg>
+        <svg width="28" height="30" viewBox="0 0 28 30"><circle cx="14" cy="15" r="11" fill="#e8a020"/><ellipse cx="14" cy="6" rx="3.5" ry="5" fill="#f0b030"/><ellipse cx="21" cy="8" rx="3.5" ry="5" fill="#f0b030" transform="rotate(40,21,8)"/><ellipse cx="24" cy="15" rx="3.5" ry="5" fill="#f0b030" transform="rotate(80,24,15)"/><ellipse cx="21" cy="22" rx="3.5" ry="5" fill="#f0b030" transform="rotate(120,21,22)"/><ellipse cx="14" cy="24" rx="3.5" ry="5" fill="#f0b030" transform="rotate(160,14,24)"/><ellipse cx="7" cy="22" rx="3.5" ry="5" fill="#f0b030" transform="rotate(200,7,22)"/><ellipse cx="4" cy="15" rx="3.5" ry="5" fill="#f0b030" transform="rotate(240,4,15)"/><ellipse cx="7" cy="8" rx="3.5" ry="5" fill="#f0b030" transform="rotate(280,7,8)"/><circle cx="14" cy="15" r="4.5" fill="#e8c060"/></svg>
+        <svg width="22" height="28" viewBox="0 0 22 28"><ellipse cx="11" cy="20" rx="9" ry="5" fill="#2c1a0e"/><ellipse cx="11" cy="16" rx="8" ry="4" fill="#3e2005"/><path d="M11,12 Q8,6 6,2 Q3,0 7,0 Q10,0 11,4 Q12,8 11,12" fill="#f0e0a0"/></svg>
+        <svg width="20" height="28" viewBox="0 0 20 28"><rect x="8" y="4" width="4" height="50" rx="1" fill="#c0c8d0" stroke="#909098" stroke-width="0.5"/><path d="M8,4 Q10,1 12,4" fill="#c0c8d0"/><rect x="4" y="52" width="12" height="3" rx="1" fill="#c9881a"/></svg>
+        <svg width="26" height="28" viewBox="0 0 26 28"><ellipse cx="13" cy="16" rx="11" ry="9" fill="#c8c0b8"/><ellipse cx="8" cy="12" rx="7" ry="6" fill="#d0c8c0"/><ellipse cx="5" cy="10" rx="3.5" ry="3" fill="#d0c8c0"/><ellipse cx="5" cy="9.5" rx="2" ry="2" fill="#2c1a0e"/><circle cx="4.5" cy="9" r="0.7" fill="#fff" opacity="0.7"/><path d="M2,10 Q1,9 2,8 Q3,7 5,8" fill="#d4a060"/><path d="M20,11 Q28,6 30,9 Q28,12 20,14" fill="#a8a0a0"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ EDIT MODAL ══════════════════ -->
+<div class="modal-overlay" id="edit-modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="m-title">Edit Card</div>
+        <div class="modal-suite" id="m-suite"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()" title="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf">
+        <label>Card Front — the question or term shown to players</label>
+        <span class="fhint" id="m-hint-q">Keep it concise. For Pictionary cards, put the term on the first line.</span>
+        <textarea id="m-q" rows="3"></textarea>
+      </div>
+      <div class="mf">
+        <label id="m-b-label">Card Back</label>
+        <span class="fhint" id="m-hint-b">Describe the scene the actor should perform. Start with: Act out:</span>
+        <textarea id="m-b" rows="3"></textarea>
+      </div>
+      <div class="mf" id="m-x-wrap">
+        <label id="m-x-label">Facilitator Note / Placement Prompt</label>
+        <span class="fhint">Shown on card back below the main answer. The real point underneath.</span>
+        <textarea id="m-x" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="saveCard()">Save Changes</button>
+      <button class="btn out sm" onclick="resetCard()">Reset to Original</button>
+      <button class="btn out sm" onclick="closeModal()">Cancel</button>
+      <span class="saved-msg" id="saved-msg">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   CONFIGURATION — paste your Google API key here
+═══════════════════════════════════════════════ */
+const GAPI_KEY        = 'YOUR_GOOGLE_API_KEY_HERE';
+const STATS_SHEET_ID  = '1S3xSezbKxfxRLBmnmL9Zasv859HalurooaSt4OHILSI';
+const QS_SHEET_ID     = '1I2lS5avaC4nupqFXE9YEJR23sUMZ9nez';
+// Tab names in the questions spreadsheet (must match exactly)
+const TAB_NAMES       = ['Yamraj','Hearts','Diamonds','Spades'];
+const STATS_RANGE     = 'Sheet1';   // tab name in stats sheet
+
+/* ═══════════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════════ */
+let G={
+  // session metadata
+  moderator:'', ageGroup:'', totalPlayers:0,
+  teamA:'Team A', teamB:'Team B',
+  teamSize:0,     // players per team (excluding moderator)
+  cardsPerTeam:3, // cards each team plays per part
+  sessionDate:'', sessionTime:'',
+  // runtime
+  scores:{A:0,B:0},
+  part:0,
+  // per-part play state
+  deckA:[],   // question indices for team A this part
+  deckB:[],   // question indices for team B this part
+  roundCards:[], // interleaved: [{team:'A',idx:N},{team:'B',idx:M},...]
+  cardPos:0,  // current position in roundCards
+  flipped:false,
+  tInt:null, tLeft:0,
+  questionsLoaded:false,
+};
+
+/* Wizard state */
+let W={ step:1, age:'', cards:3 };
+
+/* ═══════════════════════════════════════════════
+   PARTS META (no questions — loaded from sheet)
+═══════════════════════════════════════════════ */
+const PARTS_META=[
+  {id:'yamraj', num:'Part 1', title:'The Yamraj Suite',
+   suit:'★ Yamraj — Whimsy & Wonder', color:'#6b3a6b',
+   sub:'Whimsical riddles to break the ice. Chitragupt is opening his register.',
+   mech:'Facilitator reads each card aloud to both teams. Teams huddle 30 seconds, then the Spokesperson gives the answer. Opposing team votes — wise, funny, or true? Majority vote = 1 Dil Se token.',
+   tok:'Token rule: Opposing team votes. Majority = 1 token. Bonus token for an answer that makes the room go quiet.',
+   timer:false, timerSec:0, timerLbl:'', isDC:false, isTF:false, isPic:false, qs:[]},
+  {id:'dc', num:'Part 2', title:'The Values Suite — Dumb Charades',
+   suit:'♥ Hearts — What Makes Life Worth Living', color:'#b84a2f',
+   sub:'Act out a scene that shows what matters most to you. No words. Pure performance — 60 seconds.',
+   mech:'Spokesperson draws a card silently, acts out a SCENE representing the value — no speaking, no mouthing, no drawing in air. Team guesses in 60 seconds. Correct = 1 token. Actor then reveals card and shares what they were showing.',
+   tok:'Token rule: Correct guess within 60 sec = 1 token. Bonus if opposing team also understood the scene.',
+   timer:true, timerSec:60, timerLbl:'60 seconds — act it out!', isDC:true, isTF:false, isPic:false, qs:[]},
+  {id:'pic', num:'Part 3', title:'The Medical Suite — Pictionary',
+   suit:'♦ Diamonds — Draw It, Then Decide', color:'#c9881a',
+   sub:'Draw the medical term — no letters, no numbers. After guessing, both teams place the card: Very Important or Can Let Go.',
+   mech:'Spokesperson reads the term silently, draws it on paper for Team B to guess in 90 seconds. Facilitator reads the plain-language description after guessing. Both teams then place the card and give one sentence of reasoning.',
+   tok:'Token rule: Correct guess within 90 sec = 1 token. Bonus for Best Drawing voted by both teams.',
+   timer:true, timerSec:90, timerLbl:'90 seconds — draw it!', isDC:false, isTF:false, isPic:true, qs:[]},
+  {id:'tf', num:'Part 4', title:'Rapid Fire — True or False',
+   suit:'♠ Spades — Facts vs Fiction', color:'#2e7d7a',
+   sub:'Each team quizzes the other. 20 seconds to answer. No lectures — only surprises.',
+   mech:'Team A reads a Spades card to Team B. Team B huddles 20 seconds, calls TRUE or FALSE. Team A reveals the answer. Correct = 1 token for Team B. Wrong = 1 token for Team A. Then swap.',
+   tok:'Token rule: Correct answer = 1 token. Wrong = 1 token to questioning team. Bonus if answering team explains WHY.',
+   timer:true, timerSec:20, timerLbl:'20 seconds to answer!', isDC:false, isTF:true, isPic:false, qs:[]}
+];
+
+/* ═══════════════════════════════════════════════
+   ORIGINALS (populated after load)
+═══════════════════════════════════════════════ */
+let ORIGINALS=[];
+let M={partIdx:0,qIdx:0};
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function toggleFS(){
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+}
+
+/* ═══════════════════════════════════════════════
+   QUESTION LOADING (Google Sheets API)
+═══════════════════════════════════════════════ */
+async function loadQuestions(){
+  show('s-loading');
+  document.getElementById('load-err').style.display='none';
+  document.getElementById('load-retry').style.display='none';
+  document.getElementById('load-msg').textContent="Loading questions from Chitragupt's register...";
+
+  if(GAPI_KEY==='YOUR_GOOGLE_API_KEY_HERE'){
+    // No API key — use built-in fallback questions
+    document.getElementById('load-msg').textContent='No API key set — using built-in questions.';
+    await new Promise(r=>setTimeout(r,1200));
+    loadFallbackQuestions();
+    G.questionsLoaded=true;
+    show('s-setup');
+    return;
+  }
+
+  try{
+    // Fetch all 4 tabs in parallel
+    const fetches = TAB_NAMES.map(tab=>{
+      const range=encodeURIComponent(`${tab}!A2:C200`);
+      const url=`https://sheets.googleapis.com/v4/spreadsheets/${QS_SHEET_ID}/values/${range}?key=${GAPI_KEY}`;
+      return fetch(url).then(r=>r.json());
+    });
+    const results = await Promise.all(fetches);
+
+    let allOk=true;
+    results.forEach((data,i)=>{
+      if(data.error){allOk=false;console.error('Tab error',TAB_NAMES[i],data.error);return;}
+      const rows=(data.values||[]).filter(r=>r[1]); // need at least col B (front)
+      PARTS_META[i].qs = rows.map(r=>({
+        q: (r[1]||'').trim(),
+        b: (r[2]||'').trim(),
+        x: ''
+      }));
+    });
+
+    if(!allOk) throw new Error('One or more tabs failed to load');
+
+    ORIGINALS = PARTS_META.map(p=>({qs:p.qs.map(q=>({...q}))}));
+    G.questionsLoaded=true;
+    show('s-setup');
+  } catch(err){
+    console.error('Load error:',err);
+    document.getElementById('load-msg').textContent='Could not load questions from Google Sheets.';
+    document.getElementById('load-err').textContent=`Error: ${err.message}. Using built-in fallback questions.`;
+    document.getElementById('load-err').style.display='block';
+    document.getElementById('load-retry').style.display='inline-block';
+    setTimeout(()=>{ loadFallbackQuestions(); G.questionsLoaded=true; show('s-setup'); }, 2500);
+  }
+}
+
+function loadFallbackQuestions(){
+  // Minimal fallback so game works without API key
+  const fb=[
+    [{q:"There is a gentleman who has been waiting patiently for you since the day you were born. Excellent at record-keeping, never cancels appointments, always arrives on time. Who is he?",b:"Yamraj. The only question — have we prepared for it?"},{q:"Chitragupt has been updating your life file since birth. If he showed you the file today, which entry would embarrass you most?",b:"What do you want the last entry to say? A Living Will is your final entry — written by you."},{q:"Yamraj sends you a Google Calendar invite. Subject: Final Meeting — Non-negotiable. What is your auto-reply?",b:"If you had advance notice, what would you actually do differently? That is what advance care planning gives you."},{q:"Yamraj and Yamuna are twins who took completely opposite paths — one holds the record of everything you did, the other offers to wash it clean. Who is your twin?",b:"Most people will say Yamuna. Ask: whose Yamraj are you?"},{q:"You are sitting in Yamraj's waiting room. Chitragupt leans over and says: Most people here aren't afraid of death — they're afraid of the unfinished conversation, the unresolved argument, the debt never repaid. Which one is yours?",b:"Let the answers sit. Do not rush to the next question."},{q:"If this were a game show and you just won the grand prize — a good death on your own terms — describe what the prize looks like.",b:"They just described their end-of-life wishes. Say: what you described is exactly what we can help you put in writing."}],
+    [{q:"If your life were a Bollywood film, where does the final scene take place — and what is happening in it?",b:"Act out: walk into a familiar space, touch walls lovingly, look out a window. Show belonging and comfort."},{q:"Being free from pain matters more to me than living longer.",b:"Act out: wake up slowly, stretch with relief, smile peacefully — then contrast with a pained tense posture."},{q:"I want the presence of my loved ones even when I cannot speak.",b:"Act out: lie still, eyes closed — then show someone taking your hand. Show your whole body relaxing."},{q:"I want to feel like myself — not just a patient — for as long as possible.",b:"Act out: put on imaginary glasses, comb hair, pick up something you love. Show your life reclaiming itself."},{q:"I want my family to feel no guilt about the decisions they make for me.",b:"Act out: place both hands on someone's shoulders, give a clear nod of permission. Show the gift of absolution."},{q:"I want to be remembered as someone who loved well.",b:"Act out: small acts of love — adjusting someone's collar, handing over food, a hand held in passing."}],
+    [{q:"VENTILATOR
+(Breathing Machine)",b:"A machine that breathes for you when your lungs cannot.
+Drawing hint: Stick figure in bed + box with bellows + tubes to face.",x:"If you could not breathe without this machine permanently — is that the life you want?"},{q:"CPR
+(Chest Compressions)",b:"Pressing hard on the chest to restart a stopped heart. Can break ribs in elders.
+Drawing hint: Person on floor, someone kneeling pressing chest.",x:"In terminally ill patients, CPR rarely achieves meaningful recovery."},{q:"FEEDING TUBE
+(Nasogastric / PEG Tube)",b:"A tube through the nose or stomach delivering liquid nutrition.
+Drawing hint: Stick figure + line from nose to stomach + drip bag above.",x:"Food on a spoon is love. Food in a tube is medical intervention."},{q:"DNR ORDER
+(Do Not Resuscitate)",b:"Written instruction: if my heart stops, do not attempt to restart it.
+Drawing hint: Heart with a large X + document with signature.",x:"This is not giving up. It is choosing the manner of your exit."},{q:"LIVING WILL
+(Advance Medical Directive)",b:"A legal document recording your medical wishes for when you cannot speak for yourself.
+Drawing hint: Document with signature + person in bed + thought bubble.",x:"If you drew this correctly, you already understand it. Would you write one today?"},{q:"HOSPICE CARE",b:"Care focused entirely on comfort and dignity — not on curing the disease.
+Drawing hint: A home with a heart inside. No machines.",x:"This is what Sparsh does. After this game, ask us anything about it."}],
+    [{q:"A Living Will (Advance Medical Directive) is legally valid across all of India.",b:"TRUE",x:"Established in the 2018 Supreme Court Common Cause judgment, simplified in 2023."},{q:"Withdrawing a ventilator from a terminally ill patient is the same as euthanasia under Indian law.",b:"FALSE",x:"Withdrawing life-sustaining treatment is legal — it is allowing natural death."},{q:"Pain is an inevitable and untreatable part of dying.",b:"FALSE",x:"Modern palliative medicine can control the vast majority of pain at end of life."},{q:"Writing a Living Will means you have given up hope.",b:"FALSE",x:"Writing an AMD is an act of hope — that your wishes will be known and honoured."},{q:"Only elderly people or those with terminal illness need to write a Living Will.",b:"FALSE",x:"Any adult over 18 can write an AMD. Accidents happen at any age."},{q:"Hospice care can only be received in a hospice building — not at home.",b:"FALSE",x:"Hospice care is a philosophy, not a place. Most is delivered at home."}]
+  ];
+  fb.forEach((qs,i)=>{ PARTS_META[i].qs=qs; });
+  ORIGINALS=PARTS_META.map(p=>({qs:p.qs.map(q=>({...q}))}));
+}
+
+/* ═══════════════════════════════════════════════
+   SETUP WIZARD
+═══════════════════════════════════════════════ */
+function wizShow(n){
+  W.step=n;
+  document.querySelectorAll('.wiz-step').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('wiz-'+n);
+  if(el)el.classList.add('active');
+  document.getElementById('wiz-step-lbl').textContent=`Step ${n} of 5`;
+}
+
+function wizBack(from){ wizShow(from-1); }
+
+function wizNext(from){
+  if(from===1){
+    const v=document.getElementById('w-mod').value.trim();
+    if(!v){document.getElementById('e-mod').style.display='block';return;}
+    document.getElementById('e-mod').style.display='none';
+    G.moderator=v;
+    wizShow(2);
+  } else if(from===2){
+    if(!W.age){document.getElementById('e-age').style.display='block';return;}
+    document.getElementById('e-age').style.display='none';
+    G.ageGroup=W.age;
+    wizShow(3);
+  } else if(from===3){
+    const v=parseInt(document.getElementById('w-total').value);
+    if(!v||v<3||v>30){document.getElementById('e-total').style.display='block';return;}
+    document.getElementById('e-total').style.display='none';
+    G.totalPlayers=v;
+    G.teamSize=Math.floor((v-1)/2);
+    // set default cards = teamSize
+    W.cards=Math.max(1,G.teamSize);
+    document.getElementById('w-cards-disp').textContent=W.cards;
+    document.getElementById('cards-default-note').textContent=`(default: ${W.cards} — 1 per player)`;
+    wizShow(4);
+  } else if(from===4){
+    G.teamA=document.getElementById('w-ta').value.trim()||'Team A';
+    G.teamB=document.getElementById('w-tb').value.trim()||'Team B';
+    G.cardsPerTeam=W.cards;
+    buildConfirm();
+    wizShow(5);
+  }
+}
+
+function selectAge(btn){
+  document.querySelectorAll('.age-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  W.age=btn.dataset.age;
+}
+
+function adjCards(delta){
+  const max=PARTS_META[0].qs.length||25;
+  W.cards=Math.max(1,Math.min(max,W.cards+delta));
+  document.getElementById('w-cards-disp').textContent=W.cards;
+}
+
+document.getElementById('w-total').addEventListener('input',function(){
+  const v=parseInt(this.value);
+  if(v>=3&&v<=30){
+    const ts=Math.floor((v-1)/2);
+    document.getElementById('team-preview').textContent=
+      `${v-1} players → ${G.teamA||"Team A"}: ${ts}  /  ${G.teamB||"Team B"}: ${ts}  +  1 moderator`;
+  } else {
+    document.getElementById('team-preview').textContent='';
+  }
+});
+
+function buildConfirm(){
+  const now=new Date();
+  G.sessionDate=now.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  G.sessionTime=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const items=[
+    ['Moderator', G.moderator],
+    ['Date & Time', `${G.sessionDate}, ${G.sessionTime}`],
+    ['Age Group', G.ageGroup],
+    ['Total Players', G.totalPlayers+' (incl. moderator)'],
+    [G.teamA, G.teamSize+' players'],
+    [G.teamB, G.teamSize+' players'],
+    ['Cards per team / part', G.cardsPerTeam],
+    ['Source', G.questionsLoaded&&GAPI_KEY!=='YOUR_GOOGLE_API_KEY_HERE'?'Google Sheets':'Built-in fallback'],
+  ];
+  document.getElementById('confirm-grid').innerHTML=items.map(([l,v])=>
+    `<div class="confirm-item"><div class="confirm-label">${l}</div><div class="confirm-val">${v}</div></div>`
+  ).join('');
+}
+
+function beginGame(){
+  G.scores={A:0,B:0};
+  G.part=0;
+  showIntro();
+}
+
+/* ═══════════════════════════════════════════════
+   SCORE BAR
+═══════════════════════════════════════════════ */
+function barHTML(lbl){
+  return`<div class="tscore"><span style="margin-right:4px">${G.teamA}</span><div class="tok tok-a" id="tok-a">${G.scores.A}</div></div>
+<div class="part-lbl" style="max-width:160px">${lbl}</div>
+<div class="tscore"><div class="tok tok-b" id="tok-b">${G.scores.B}</div><span style="margin-left:4px">${G.teamB}</span></div>`;
+}
+function updateBars(){
+  const p=PARTS_META[G.part];
+  const lbl=`${p.num} of 4`;
+  ['ib-bar','sel-bar','pb-bar'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.innerHTML=barHTML(lbl);el.style.background=p.color;}
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   PART INTRO
+═══════════════════════════════════════════════ */
+function showIntro(){
+  const p=PARTS_META[G.part];
+  document.getElementById('i-pnum').textContent=`${p.num} of 4 — ${p.suit}`;
+  document.getElementById('i-title').textContent=p.title;
+  document.getElementById('i-sub').textContent=p.sub;
+  document.getElementById('i-mech').textContent=p.mech;
+  document.getElementById('i-tok').textContent=p.tok;
+  updateBars();
+  show('s-intro');
+}
+
+/* ═══════════════════════════════════════════════
+   SELECT SCREEN  (kept for manual override)
+═══════════════════════════════════════════════ */
+function openSelectScreen(){
+  // Auto-build the round instead of manual selection
+  buildRound();
+  loadPlayScreen();
+}
+
+/* ═══════════════════════════════════════════════
+   ROUND BUILDER — alternating A/B cards
+═══════════════════════════════════════════════ */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function buildRound(){
+  const p=PARTS_META[G.part];
+  const total=p.qs.length;
+  const n=Math.min(G.cardsPerTeam,total);
+
+  // Shuffle all indices, give first n to A, next n to B (no overlap)
+  const pool=shuffle(p.qs.map((_,i)=>i));
+  const aPool=pool.slice(0,n);
+  // If not enough cards for B, reshuffle remaining
+  let bPool;
+  if(pool.length>=2*n){
+    bPool=pool.slice(n,2*n);
+  } else {
+    // wrap around — B gets from reshuffled full deck excluding A's
+    const used=new Set(aPool);
+    const rest=shuffle(p.qs.map((_,i)=>i).filter(i=>!used.has(i)));
+    bPool=rest.slice(0,n);
+  }
+
+  // Interleave: A0, B0, A1, B1 ...
+  G.roundCards=[];
+  for(let i=0;i<n;i++){
+    G.roundCards.push({team:'A',idx:aPool[i]});
+    G.roundCards.push({team:'B',idx:bPool[i]});
+  }
+  G.cardPos=0;
+}
+
+/* ═══════════════════════════════════════════════
+   PLAY SCREEN
+═══════════════════════════════════════════════ */
+function loadPlayScreen(){
+  const p=PARTS_META[G.part];
+  updateBars();
+
+  const tRow=document.getElementById('t-row');
+  tRow.style.display=p.timer?'flex':'none';
+  if(p.timer){
+    document.getElementById('t-lbl').textContent=p.timerLbl;
+    G.tLeft=p.timerSec;
+    renderTimer(p.timerSec,p.timerSec);
+  }
+  stopTimer();
+
+  document.getElementById('d-a-n').textContent=G.teamA;
+  document.getElementById('d-b-n').textContent=G.teamB;
+
+  loadCard();
+  show('s-play');
+}
+
+function currentTeam(){
+  if(!G.roundCards.length) return 'A';
+  return G.roundCards[G.cardPos]?.team||'A';
+}
+
+function updateTeamBanner(){
+  const team=currentTeam();
+  const name=team==='A'?G.teamA:G.teamB;
+  const color=team==='A'?'#b84a2f':'#c9881a';
+  const banner=document.getElementById('team-banner');
+  banner.style.background=color;
+  const pos=G.cardPos+1;
+  const total=G.roundCards.length;
+  banner.textContent=`${name}'s turn  —  Card ${pos} of ${total}`;
+}
+
+function loadCard(){
+  const p=PARTS_META[G.part];
+  const entry=G.roundCards[G.cardPos];
+  if(!entry)return;
+  const q=p.qs[entry.idx];
+  G.flipped=false;
+
+  updateTeamBanner();
+
+  const card=document.getElementById('card');
+  card.classList.remove('flipped');
+  card.style.cursor=p.isTF?'default':'pointer';
+
+  const suit=document.getElementById('c-suit');
+  suit.textContent=p.suit;suit.style.color=p.color;
+
+  const cq=document.getElementById('c-q');
+  const ctap=document.getElementById('c-tap');
+  if(p.isPic){
+    cq.innerHTML=`<div class="pic-term">${q.q.replace(/\n/g,'<br>')}</div><div class="pic-inst">Artist: draw on paper — no letters or numbers</div>`;
+    ctap.textContent='Flip to reveal plain-language description →';
+  } else if(p.isTF){
+    cq.textContent=q.q; ctap.textContent='';
+  } else {
+    cq.textContent=q.q;
+    ctap.textContent=p.isDC?'act it out — then tap to reveal the prompt →':'tap card to reveal →';
+  }
+
+  const cb=document.getElementById('c-back');
+  let bHTML='';
+  if(p.isDC){
+    bHTML+=`<div class="c-suit" style="color:${p.color}">Acting Prompt</div>`;
+    bHTML+=`<div class="act-prompt"><div class="act-label">Scene to act out:</div><div class="act-text">${q.b}</div></div>`;
+    if(q.x)bHTML+=`<div class="c-hint" style="margin-top:12px"><strong>Value revealed:</strong> ${q.x}</div>`;
+  } else if(p.isPic){
+    bHTML+=`<div class="c-suit" style="color:${p.color}">Plain-Language Description</div>`;
+    bHTML+=`<div class="c-ans">${q.b.replace(/\n/g,'<br>')}</div>`;
+    if(q.x)bHTML+=`<div class="c-hint"><strong>Placement prompt:</strong> ${q.x}</div>`;
+  } else if(p.isTF){
+    const isT=q.b==='TRUE';
+    bHTML+=`<div class="tf-reveal sketch" style="display:block;color:${isT?'var(--sage)':'var(--red)'};background:${isT?'var(--teal-l)':'var(--red-l)'};border-color:${isT?'var(--sage)':'var(--red)'};font-size:2rem;font-weight:700;text-align:center;padding:12px;margin-bottom:12px">${q.b}</div>`;
+    bHTML+=`<div class="c-ans">${q.x}</div>`;
+  } else {
+    bHTML+=`<div class="c-suit" style="color:${p.color}">The Real Point</div>`;
+    bHTML+=`<div class="c-ans">${q.b}</div>`;
+  }
+  cb.innerHTML=bHTML;
+
+  const tfRow=document.getElementById('tf-row');
+  const tfReveal=document.getElementById('tf-reveal');
+  if(p.isTF){tfRow.style.display='flex';tfReveal.style.display='none';}
+  else{tfRow.style.display='none';tfReveal.style.display='none';}
+
+  const pos=G.cardPos+1;
+  const total=G.roundCards.length;
+  document.getElementById('q-ctr').textContent=`Card ${pos} of ${total}`;
+  document.getElementById('next-btn').textContent=
+    G.cardPos===G.roundCards.length-1?'Finish Part ✓':'Next →';
+
+  stopTimer();
+  if(p.timer){G.tLeft=p.timerSec;renderTimer(p.timerSec,p.timerSec);}
+}
+
+function flipCard(){
+  if(PARTS_META[G.part].isTF)return;
+  G.flipped=!G.flipped;
+  document.getElementById('card').classList.toggle('flipped',G.flipped);
+}
+function doTF(){
+  document.getElementById('card').classList.add('flipped');
+  stopTimer();
+}
+
+/* ═══════════════════════════════════════════════
+   TIMER
+═══════════════════════════════════════════════ */
+const CIRC=188.5;
+function renderTimer(left,total){
+  document.getElementById('t-num').textContent=left;
+  document.getElementById('t-arc').style.strokeDashoffset=CIRC*(1-left/total);
+  const warn=left<=5&&left>0;
+  document.getElementById('t-num').className='t-num'+(warn?' warn':'');
+  document.getElementById('t-arc').style.stroke=warn?'var(--red)':'var(--ink2)';
+}
+function startTimer(){
+  stopTimer();
+  const p=PARTS_META[G.part];
+  G.tLeft=p.timerSec;
+  renderTimer(G.tLeft,p.timerSec);
+  G.tInt=setInterval(()=>{
+    G.tLeft--;
+    renderTimer(G.tLeft,p.timerSec);
+    if(G.tLeft<=0)stopTimer();
+  },1000);
+}
+function stopTimer(){clearInterval(G.tInt);G.tInt=null;}
+
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+function award(team){
+  G.scores[team]++;
+  updateBars();
+  const btn=document.getElementById('d-'+team.toLowerCase());
+  btn.classList.add('flash');
+  setTimeout(()=>btn.classList.remove('flash'),350);
+  const tok=document.getElementById('tok-'+team.toLowerCase());
+  if(tok){tok.classList.add('bump');setTimeout(()=>tok.classList.remove('bump'),300);}
+}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+function goBack(){
+  if(G.part===0)show('s-setup');
+  else showIntro();
+}
+
+function nextQ(){
+  stopTimer();
+  if(G.cardPos<G.roundCards.length-1){
+    G.cardPos++;
+    loadCard();
+  } else {
+    G.part++;
+    if(G.part<PARTS_META.length){ buildRound(); showIntro(); }
+    else showScore();
+  }
+}
+function prevQ(){
+  stopTimer();
+  if(G.cardPos>0){G.cardPos--;loadCard();}
+}
+
+/* ═══════════════════════════════════════════════
+   SCOREBOARD + STATS WRITE
+═══════════════════════════════════════════════ */
+function showScore(){
+  const A=G.scores.A, B=G.scores.B;
+  const aWin=A>B, bWin=B>A;
+  document.getElementById('score-cards').innerHTML=`
+    <div class="sc sketch">
+      <div class="sc-name" style="color:var(--red)">${G.teamA}</div>
+      <div class="sc-num" style="color:var(--red)">${A}</div>
+      <div class="sc-unit">Dil Se tokens</div>
+      ${aWin?'<div class="trophy">Chitragupt Ka Khata Trophy ✦</div>':''}
+    </div>
+    <div class="sc sketch">
+      <div class="sc-name" style="color:var(--gold)">${G.teamB}</div>
+      <div class="sc-num" style="color:var(--gold)">${B}</div>
+      <div class="sc-unit">Dil Se tokens</div>
+      ${bWin?'<div class="trophy">Chitragupt Ka Khata Trophy ✦</div>':''}
+    </div>`;
+  if(A===B){
+    document.getElementById('score-cards').insertAdjacentHTML('afterend',
+      '<div style="font-family:var(--h);font-size:1.2rem;color:var(--sage);text-align:center;margin-bottom:16px">A perfect tie — Chitragupt has recorded this as a draw of great dignity.</div>');
+  }
+  show('s-score');
+  writeStats();
+}
+
+async function writeStats(){
+  if(GAPI_KEY==='YOUR_GOOGLE_API_KEY_HERE'){console.log('No API key — stats not written.');return;}
+  try{
+    const HEADERS=['Date','Time','Moderator','Age Group','Total Players','Team A','Team A Size',
+      'Team B','Team B Size','Cards Per Team Per Part','Team A Tokens','Team B Tokens','Winner'];
+    const winner=G.scores.A>G.scores.B?G.teamA:G.scores.B>G.scores.A?G.teamB:'Draw';
+    const row=[G.sessionDate,G.sessionTime,G.moderator,G.ageGroup,G.totalPlayers,
+      G.teamA,G.teamSize,G.teamB,G.teamSize,G.cardsPerTeam,G.scores.A,G.scores.B,winner];
+
+    // First check if headers exist (read row 1)
+    const checkUrl=`https://sheets.googleapis.com/v4/spreadsheets/${STATS_SHEET_ID}/values/${STATS_RANGE}!A1:M1?key=${GAPI_KEY}`;
+    const checkRes=await fetch(checkUrl);
+    const checkData=await checkRes.json();
+    const hasHeaders=checkData.values&&checkData.values[0]&&checkData.values[0][0]==='Date';
+
+    const rowsToWrite=hasHeaders?[row]:[HEADERS,row];
+
+    // Use append API (needs OAuth for write — inform user)
+    // For write access, we use the fetch + API key won't work for writing.
+    // We store locally and show the data instead.
+    console.log('Session data to write:', rowsToWrite);
+    showStatsNote(row, HEADERS);
+  } catch(e){
+    console.error('Stats write error:',e);
+  }
+}
+
+function showStatsNote(row, headers){
+  // Show a copyable summary since API key alone cannot write to Sheets
+  const lines=headers.map((h,i)=>`${h}: ${row[i]}`).join('\n');
+  const existing=document.getElementById('stats-note');
+  if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='stats-note';
+  div.style=`font-family:var(--b);font-size:0.78rem;color:var(--ink3);margin-top:16px;padding:10px 14px;
+    background:rgba(255,255,255,0.3);border:1px dashed rgba(44,26,14,0.2);border-radius:2px;max-width:560px`;
+  div.innerHTML=`<div style="font-family:var(--h);font-size:0.9rem;font-weight:700;color:var(--ink2);margin-bottom:6px">
+    Session recorded — copy to your khata register:</div>
+    <pre style="font-size:0.75rem;white-space:pre-wrap">${lines}</pre>
+    <div style="margin-top:8px;font-style:italic">To enable automatic Google Sheets writing, a service account or OAuth flow is needed. Ask your developer to add write credentials.</div>`;
+  document.querySelector('.score-inner').appendChild(div);
+}
+
+function restartGame(){
+  G.part=0; G.scores={A:0,B:0};
+  // Go back to setup to capture new session
+  wizShow(1);
+  show('s-setup');
+}
+
+/* ═══════════════════════════════════════════════
+   EDIT MODAL
+═══════════════════════════════════════════════ */
+function openModal(partIdx,qIdx){
+  const p=PARTS_META[partIdx];
+  const q=p.qs[qIdx];
+  M={partIdx,qIdx};
+  document.getElementById('m-title').textContent=`Edit Card ${qIdx+1}`;
+  document.getElementById('m-suite').textContent=p.suit;
+  document.getElementById('m-q').value=q.q;
+  document.getElementById('m-b').value=q.b;
+  const bLabel=document.getElementById('m-b-label');
+  const bHint=document.getElementById('m-hint-b');
+  const xWrap=document.getElementById('m-x-wrap');
+  const xLabel=document.getElementById('m-x-label');
+  if(p.isDC){
+    bLabel.textContent='Acting Prompt (Card Back)';
+    bHint.textContent='Describe the scene the actor should perform. Start with: Act out:';
+    xWrap.style.display='block'; xLabel.textContent='Value Revealed (Facilitator Note)';
+  } else if(p.isPic){
+    bLabel.textContent='Plain-Language Description (Card Back)';
+    bHint.textContent='Read aloud after the group guesses. Include drawing hint on a new line.';
+    xWrap.style.display='block'; xLabel.textContent='Placement Prompt';
+  } else if(p.isTF){
+    bLabel.textContent='Correct Answer';
+    bHint.textContent='Must be exactly: TRUE  or  FALSE';
+    xWrap.style.display='block'; xLabel.textContent='Explanation';
+  } else {
+    bLabel.textContent='The Real Point (Card Back — Facilitator Only)';
+    bHint.textContent='The insight this question is designed to surface.';
+    xWrap.style.display='none';
+  }
+  if(q.x!==undefined) document.getElementById('m-x').value=q.x||'';
+  document.getElementById('saved-msg').classList.remove('show');
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeModal(){ document.getElementById('edit-modal').classList.remove('open'); }
+function closeModalOutside(e){ if(e.target===document.getElementById('edit-modal'))closeModal(); }
+function saveCard(){
+  const p=PARTS_META[M.partIdx];
+  const q=p.qs[M.qIdx];
+  q.q=document.getElementById('m-q').value.trim();
+  q.b=document.getElementById('m-b').value.trim();
+  if(document.getElementById('m-x-wrap').style.display!=='none')
+    q.x=document.getElementById('m-x').value.trim();
+  const msg=document.getElementById('saved-msg');
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'),2000);
+}
+function resetCard(){
+  const orig=ORIGINALS[M.partIdx]?.qs[M.qIdx];
+  if(!orig) return;
+  const q=PARTS_META[M.partIdx].qs[M.qIdx];
+  document.getElementById('m-q').value=orig.q;
+  document.getElementById('m-b').value=orig.b;
+  if(orig.x!==undefined) document.getElementById('m-x').value=orig.x||'';
+  q.q=orig.q; q.b=orig.b; if(orig.x!==undefined)q.x=orig.x;
+  const msg=document.getElementById('saved-msg');
+  msg.textContent='↩ Reset to original';
+  msg.classList.add('show');
+  setTimeout(()=>{msg.classList.remove('show');msg.textContent='✓ Saved';},2000);
+}
+document.addEventListener('keydown',(e)=>{ if(e.key==='Escape')closeModal(); });
+
+/* ═══════════════════════════════════════════════
+   START — load questions then show setup
+═══════════════════════════════════════════════ */
+loadQuestions();
+</script>
+</body>
+</html>

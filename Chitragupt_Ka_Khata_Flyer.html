@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chitragupt Ka Khata — Informational Flyer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Kalam',cursive,'Comic Sans MS',cursive;
+  background:#e8dfc8;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:20px;min-height:100vh;
+}
+.page{
+  width:210mm;max-width:100%;
+  background:#faf5ed;
+  position:relative;
+  padding:0;
+  box-shadow:0 4px 24px rgba(44,26,14,0.18);
+}
+/* paper texture lines */
+.page::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(
+    0deg,transparent,transparent 27px,rgba(139,99,67,0.07) 28px);
+  z-index:0;
+}
+/* all content above texture */
+.page>*{position:relative;z-index:1}
+
+/* ── HEADER BAND ──────────────────────────── */
+.header{
+  background:#3e2005;
+  padding:28px 32px 20px;
+  text-align:center;
+  border-bottom:4px solid #c9881a;
+}
+.header-ornament{
+  font-family:'Caveat',cursive;
+  font-size:0.95rem;color:#c9881a;letter-spacing:5px;
+  margin-bottom:10px;
+}
+.header-title{
+  font-family:'Caveat',cursive;
+  font-size:2.6rem;font-weight:700;color:#faf5ed;
+  line-height:1.1;margin-bottom:4px;
+}
+.header-hindi{
+  font-family:'Caveat',cursive;
+  font-size:1.3rem;color:#c9881a;margin-bottom:8px;
+}
+.header-tag{
+  font-family:'Kalam',cursive;
+  font-size:0.9rem;color:#ede0c0;font-style:italic;
+}
+.header-sparsh{
+  font-family:'Kalam',cursive;
+  font-size:0.78rem;color:#8b7050;margin-top:10px;letter-spacing:1px;
+}
+
+/* ── CHARACTERS ROW ───────────────────────── */
+.characters{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;border-bottom:2px solid #c9881a;
+}
+.char-panel{
+  padding:20px 22px;
+  border-right:1px solid rgba(139,99,67,0.25);
+}
+.char-panel:last-child{border-right:none}
+.char-svg-wrap{
+  display:flex;justify-content:center;margin-bottom:12px;
+}
+.char-name{
+  font-family:'Caveat',cursive;font-size:1.4rem;font-weight:700;
+  color:#3e2005;margin-bottom:3px;
+}
+.char-role{
+  font-family:'Kalam',cursive;font-size:0.78rem;
+  color:#8b6343;font-style:italic;margin-bottom:8px;
+}
+.char-desc{
+  font-family:'Kalam',cursive;font-size:0.82rem;
+  color:#4a2e10;line-height:1.65;
+}
+.char-quote{
+  margin-top:8px;padding:7px 12px;
+  border-left:3px solid #c9881a;
+  background:rgba(201,136,26,0.08);
+  font-family:'Caveat',cursive;font-size:0.9rem;
+  color:#5c3010;font-style:italic;
+}
+
+/* ── MAIN CONTENT ─────────────────────────── */
+.content{padding:20px 28px 0;}
+
+.section-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;margin-top:18px;
+}
+.section-icon{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.section-title{
+  font-family:'Caveat',cursive;font-size:1.25rem;font-weight:700;color:#3e2005;
+}
+.section-body{
+  font-family:'Kalam',cursive;font-size:0.84rem;
+  color:#4a2e10;line-height:1.7;margin-bottom:6px;
+}
+
+/* khata meaning box */
+.khata-box{
+  background:rgba(201,136,26,0.1);border:1.5px solid #c9881a;
+  border-radius:3px;padding:12px 16px;margin:10px 0;
+}
+.khata-meanings{list-style:none;display:flex;flex-direction:column;gap:5px}
+.khata-meanings li{
+  font-family:'Kalam',cursive;font-size:0.82rem;color:#3e2005;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.meaning-num{
+  font-family:'Caveat',cursive;font-weight:700;font-size:1rem;
+  color:#c9881a;min-width:18px;
+}
+
+/* living will Q&A */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.qa-card{
+  background:#fff8f0;border:1.5px solid rgba(139,99,67,0.3);
+  border-radius:3px;padding:10px 12px;
+}
+.qa-q{
+  font-family:'Caveat',cursive;font-size:0.9rem;font-weight:700;
+  color:#b84a2f;margin-bottom:4px;
+}
+.qa-a{
+  font-family:'Kalam',cursive;font-size:0.8rem;
+  color:#3e2005;line-height:1.6;
+}
+
+/* legal box */
+.legal-box{
+  background:#e8f4f3;border-left:4px solid #2e7d7a;
+  padding:10px 14px;border-radius:2px;margin:10px 0;
+}
+.legal-head{
+  font-family:'Caveat',cursive;font-size:0.92rem;font-weight:700;
+  color:#2e7d7a;margin-bottom:4px;
+}
+.legal-body{
+  font-family:'Kalam',cursive;font-size:0.8rem;color:#1a4a48;line-height:1.65;
+}
+
+/* what to write */
+.steps{display:flex;flex-direction:column;gap:6px;margin:8px 0;}
+.step{display:flex;align-items:flex-start;gap:10px;}
+.step-num{
+  width:22px;height:22px;border-radius:50%;
+  background:#3e2005;color:#faf5ed;
+  font-family:'Caveat',cursive;font-size:0.88rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  margin-top:1px;
+}
+.step-text{
+  font-family:'Kalam',cursive;font-size:0.81rem;color:#3e2005;line-height:1.6;
+}
+.step-text strong{font-weight:700;color:#b84a2f;}
+
+/* divider */
+.divider{
+  height:1px;background:linear-gradient(90deg,transparent,#c9881a 20%,#c9881a 80%,transparent);
+  margin:14px 0;opacity:0.5;
+}
+
+/* tagline strip */
+.tagline-strip{
+  background:#3e2005;
+  padding:12px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+  margin-top:16px;
+}
+.tagline-main{
+  font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;
+  color:#c9881a;
+}
+.tagline-en{
+  font-family:'Kalam',cursive;font-size:0.82rem;
+  color:#ede0c0;font-style:italic;
+}
+.tagline-contact{
+  font-family:'Kalam',cursive;font-size:0.78rem;
+  color:#8b7050;text-align:right;
+}
+
+/* artifact footer */
+.art-footer{
+  display:flex;justify-content:center;align-items:center;
+  gap:16px;padding:10px 28px 14px;
+  border-top:1px dashed rgba(139,99,67,0.3);
+}
+
+@media print{
+  body{background:white;padding:0}
+  .page{box-shadow:none;width:210mm}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-ornament">✦  ✦  ✦</div>
+    <div class="header-title">Chitragupt Ka Khata</div>
+    <div class="header-hindi">चित्रगुप्त का खाता</div>
+    <div class="header-tag">Your life. On record. In your words.</div>
+    <div class="header-sparsh">A facilitated team game for advance care planning  ·  Sparsh Behavioral Lab, Sparsh Hospice, Hyderabad</div>
+  </div>
+
+  <!-- CHARACTERS -->
+  <div class="characters">
+
+    <!-- YAMRAJ -->
+    <div class="char-panel">
+      <div class="char-svg-wrap">
+        <svg width="90" height="120" viewBox="0 0 232 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="f-yb" cx="42%" cy="38%" r="55%"><stop offset="0%" stop-color="#c9a0d8"/><stop offset="60%" stop-color="#a060b8"/><stop offset="100%" stop-color="#7840a0"/></radialGradient>
+            <radialGradient id="f-yl" cx="45%" cy="30%" r="60%"><stop offset="0%" stop-color="#6030a0"/><stop offset="100%" stop-color="#401870"/></radialGradient>
+            <radialGradient id="f-my" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#ffe060"/><stop offset="100%" stop-color="#c09010"/></radialGradient>
+          </defs>
+          <ellipse cx="116" cy="390" rx="68" ry="14" fill="#8b4513" opacity="0.18"/>
+          <rect x="93" y="340" width="13" height="52" rx="6" fill="#401870"/>
+          <rect x="126" y="340" width="13" height="52" rx="6" fill="#401870"/>
+          <ellipse cx="99" cy="393" rx="14" ry="8" fill="#a060b8"/>
+          <path d="M86,392 Q88,382 99,386 Q110,390 112,392 Q114,396 108,398 Q98,400 90,396 Z" fill="#a060b8"/>
+          <ellipse cx="85" cy="390" rx="6" ry="5" fill="#c080d8"/>
+          <ellipse cx="133" cy="393" rx="14" ry="8" fill="#a060b8"/>
+          <path d="M120,392 Q122,382 133,386 Q144,390 146,392 Q148,396 142,398 Q132,400 124,396 Z" fill="#a060b8"/>
+          <ellipse cx="147" cy="390" rx="6" ry="5" fill="#c080d8"/>
+          <ellipse cx="116" cy="290" rx="90" ry="75" fill="url(#f-yl)"/>
+          <path d="M42,300 Q60,320 116,325 Q172,320 190,300" fill="none" stroke="#5040a0" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <path d="M46,240 Q60,230 80,235 Q70,260 68,295 Q66,320 70,340 L55,340 Q50,310 52,280 Z" fill="#5040a0" opacity="0.85"/>
+          <ellipse cx="116" cy="220" rx="82" ry="80" fill="url(#f-yb)"/>
+          <ellipse cx="95" cy="188" rx="28" ry="20" fill="#e0b0f0" opacity="0.22"/>
+          <path d="M40,195 Q35,188 40,182 Q46,176 50,183 Q48,190 42,192 Z" fill="#b0a0c0"/>
+          <path d="M36,210 Q30,202 35,196 Q41,190 45,197 Q44,205 38,207 Z" fill="#a090b0"/>
+          <path d="M192,195 Q197,188 192,182 Q186,176 182,183 Q184,190 190,192 Z" fill="#b0a0c0"/>
+          <path d="M196,210 Q202,202 197,196 Q191,190 187,197 Q188,205 194,207 Z" fill="#a090b0"/>
+          <path d="M72,148 Q52,110 60,72 Q66,50 78,60 Q88,72 82,100 Q78,124 72,148 Z" fill="#d060b0"/>
+          <path d="M160,148 Q180,110 172,72 Q166,50 154,60 Q144,72 150,100 Q154,124 160,148 Z" fill="#d060b0"/>
+          <ellipse cx="116" cy="154" rx="36" ry="14" fill="#c09010"/>
+          <path d="M80,154 Q82,120 116,108 Q150,120 152,154 Z" fill="#ffe040"/>
+          <ellipse cx="116" cy="154" rx="36" ry="14" fill="#c09010" opacity="0.4"/>
+          <polygon points="116,102 120,112 112,112" fill="#e8c040"/>
+          <path d="M88,186 Q96,180 106,184" fill="none" stroke="#2c1020" stroke-width="3" stroke-linecap="round"/>
+          <path d="M126,184 Q136,180 144,186" fill="none" stroke="#2c1020" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="97" cy="196" rx="13" ry="13" fill="white"/>
+          <ellipse cx="135" cy="196" rx="13" ry="13" fill="white"/>
+          <ellipse cx="99" cy="197" rx="8" ry="9" fill="#2c1020"/>
+          <ellipse cx="137" cy="197" rx="8" ry="9" fill="#2c1020"/>
+          <ellipse cx="96" cy="194" rx="3" ry="3" fill="white"/>
+          <ellipse cx="134" cy="194" rx="3" ry="3" fill="white"/>
+          <ellipse cx="97" cy="196" rx="13" ry="13" fill="none" stroke="#2c1020" stroke-width="1.5"/>
+          <ellipse cx="135" cy="196" rx="13" ry="13" fill="none" stroke="#2c1020" stroke-width="1.5"/>
+          <path d="M116,228 Q95,224 76,228 Q58,234 54,248 Q52,260 64,262 Q76,264 84,254 Q88,246 80,240 Q72,236 68,242" fill="none" stroke="#100810" stroke-width="9" stroke-linecap="round"/>
+          <path d="M116,228 Q95,224 76,228 Q58,234 54,248 Q52,260 64,262 Q76,264 84,254 Q88,246 80,240 Q72,236 68,242" fill="none" stroke="#1a1028" stroke-width="6" stroke-linecap="round"/>
+          <path d="M116,228 Q137,224 156,228 Q174,234 178,248 Q180,260 168,262 Q156,264 148,254 Q144,246 152,240 Q160,236 164,242" fill="none" stroke="#100810" stroke-width="9" stroke-linecap="round"/>
+          <path d="M116,228 Q137,224 156,228 Q174,234 178,248 Q180,260 168,262 Q156,264 148,254 Q144,246 152,240 Q160,236 164,242" fill="none" stroke="#1a1028" stroke-width="6" stroke-linecap="round"/>
+          <ellipse cx="116" cy="228" rx="6" ry="4" fill="#2a1838"/>
+          <path d="M186,280 Q195,300 198,320 Q200,340 196,360" fill="none" stroke="#8b6010" stroke-width="3" stroke-linecap="round"/>
+          <path d="M186,280 Q195,300 198,320 Q200,340 196,360" fill="none" stroke="#e8c040" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,4"/>
+          <ellipse cx="196" cy="372" rx="22" ry="25" fill="url(#f-my)"/>
+          <ellipse cx="196" cy="372" rx="22" ry="25" fill="none" stroke="#c09010" stroke-width="2"/>
+          <ellipse cx="190" cy="360" rx="8" ry="7" fill="#ffe880" opacity="0.4"/>
+          <ellipse cx="196" cy="394" rx="8" ry="5" fill="#c09010"/>
+          <ellipse cx="42" cy="265" rx="14" ry="12" fill="#7840a0"/>
+        </svg>
+      </div>
+      <div class="char-name">Yamraj</div>
+      <div class="char-role">याम राज  ·  Lord of Dharma</div>
+      <div class="char-desc">
+        In Hindu mythology, Yamraj is the keeper of cosmic justice — not a frightening figure, but a patient, meticulous one. He maintains the order of things. He does not arrive early. He does not arrive late. And he never cancels.
+      </div>
+      <div class="char-quote">"He has had a calendar invite for you since the day you were born. The subject: Final Meeting. The question is whether you have prepared for it."</div>
+    </div>
+
+    <!-- CHITRAGUPT -->
+    <div class="char-panel">
+      <div class="char-svg-wrap">
+        <svg width="90" height="120" viewBox="0 0 236 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="f-cb" cx="42%" cy="38%" r="55%"><stop offset="0%" stop-color="#f0c080"/><stop offset="55%" stop-color="#d4882a"/><stop offset="100%" stop-color="#a05810"/></radialGradient>
+            <radialGradient id="f-cl" cx="45%" cy="30%" r="60%"><stop offset="0%" stop-color="#c06820"/><stop offset="100%" stop-color="#8b3a10"/></radialGradient>
+            <radialGradient id="f-lr" cx="30%" cy="25%" r="65%"><stop offset="0%" stop-color="#d46040"/><stop offset="100%" stop-color="#8b2a10"/></radialGradient>
+          </defs>
+          <ellipse cx="118" cy="385" rx="64" ry="13" fill="#8b4513" opacity="0.18"/>
+          <rect x="96" y="335" width="13" height="52" rx="6" fill="#8b3a10"/>
+          <rect x="129" y="335" width="13" height="52" rx="6" fill="#8b3a10"/>
+          <ellipse cx="102" cy="388" rx="14" ry="8" fill="#c06820"/>
+          <path d="M89,387 Q91,377 102,381 Q113,385 115,387 Q117,391 111,393 Q101,395 93,391 Z" fill="#c06820"/>
+          <ellipse cx="88" cy="385" rx="6" ry="5" fill="#e08830"/>
+          <ellipse cx="136" cy="388" rx="14" ry="8" fill="#c06820"/>
+          <path d="M123,387 Q125,377 136,381 Q147,385 149,387 Q151,391 145,393 Q135,395 127,391 Z" fill="#c06820"/>
+          <ellipse cx="150" cy="385" rx="6" ry="5" fill="#e08830"/>
+          <ellipse cx="118" cy="285" rx="86" ry="72" fill="url(#f-cl)"/>
+          <path d="M46,294 Q70,312 118,318 Q166,312 190,294" fill="none" stroke="#7a2e08" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+          <ellipse cx="118" cy="214" rx="80" ry="77" fill="url(#f-cb)"/>
+          <ellipse cx="97" cy="182" rx="26" ry="18" fill="#ffe0a0" opacity="0.22"/>
+          <path d="M44,188 Q37,179 43,172 Q50,166 55,174 Q52,182 45,185 Z" fill="#5c3010"/>
+          <path d="M40,205 Q33,196 39,189 Q46,182 51,190 Q49,199 42,202 Z" fill="#4a2808"/>
+          <path d="M58,160 Q55,150 62,145 Q69,142 72,150 Q70,158 63,160 Z" fill="#5c3010"/>
+          <path d="M192,188 Q199,179 193,172 Q186,166 181,174 Q184,182 191,185 Z" fill="#5c3010"/>
+          <path d="M196,205 Q203,196 197,189 Q190,182 185,190 Q187,199 194,202 Z" fill="#4a2808"/>
+          <path d="M178,158 Q181,148 175,143 Q168,140 165,148 Q167,156 174,158 Z" fill="#5c3010"/>
+          <ellipse cx="118" cy="150" rx="32" ry="12" fill="#a06010"/>
+          <path d="M86,150 Q88,122 118,112 Q148,122 150,150 Z" fill="#e8a020"/>
+          <ellipse cx="118" cy="150" rx="32" ry="12" fill="#c09010" opacity="0.35"/>
+          <polygon points="118,106 122,116 114,116" fill="#e8c040"/>
+          <polygon points="102,110 105,120 99,120" fill="#c09010"/>
+          <polygon points="134,110 137,120 131,120" fill="#c09010"/>
+          <line x1="99" y1="196" x2="111" y2="196" stroke="#5c3010" stroke-width="2.5"/>
+          <circle cx="88" cy="196" r="17" fill="none" stroke="#5c3010" stroke-width="3"/>
+          <circle cx="88" cy="196" r="17" fill="#e8f4f0" opacity="0.25"/>
+          <circle cx="122" cy="196" r="17" fill="none" stroke="#5c3010" stroke-width="3"/>
+          <circle cx="122" cy="196" r="17" fill="#e8f4f0" opacity="0.25"/>
+          <path d="M71,194 Q58,192 50,196" fill="none" stroke="#5c3010" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M139,194 Q152,192 160,196" fill="none" stroke="#5c3010" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="88" cy="195" rx="10" ry="11" fill="white"/>
+          <ellipse cx="122" cy="195" rx="10" ry="11" fill="white"/>
+          <ellipse cx="90" cy="196" rx="7" ry="8" fill="#3e2005"/>
+          <ellipse cx="124" cy="196" rx="7" ry="8" fill="#3e2005"/>
+          <ellipse cx="88" cy="193" rx="2.5" ry="2.5" fill="white"/>
+          <ellipse cx="122" cy="193" rx="2.5" ry="2.5" fill="white"/>
+          <path d="M74,182 Q82,176 92,180" fill="none" stroke="#3e2005" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M112,180 Q122,176 130,182" fill="none" stroke="#3e2005" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M104,218 Q96,214 88,218 Q80,224 82,232 Q88,236 96,230 Q100,224 98,218" fill="none" stroke="#3e2005" stroke-width="6" stroke-linecap="round"/>
+          <path d="M116,218 Q124,214 132,218 Q140,224 138,232 Q132,236 124,230 Q120,224 122,218" fill="none" stroke="#3e2005" stroke-width="6" stroke-linecap="round"/>
+          <path d="M104,218 Q110,222 116,218" fill="none" stroke="#3e2005" stroke-width="5" stroke-linecap="round"/>
+          <path d="M47,175 Q52,162 58,152 Q64,140 70,130 Q76,118 72,108 Q68,98 62,104 Q58,112 60,124 Q62,136 58,148 Q54,160 47,175" fill="#f0e0a0" stroke="#c9a030" stroke-width="0.8"/>
+          <path d="M47,175 Q45,178 48,179 Q52,180 54,177" fill="#8b6010"/>
+          <rect x="148" y="200" width="68" height="86" rx="4" fill="url(#f-lr)"/>
+          <rect x="148" y="200" width="10" height="86" rx="2" fill="#6a1a08"/>
+          <rect x="158" y="206" width="52" height="74" rx="1" fill="#f5edd8"/>
+          <line x1="162" y1="216" x2="206" y2="216" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="224" x2="206" y2="224" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="232" x2="206" y2="232" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="240" x2="206" y2="240" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="248" x2="206" y2="248" stroke="#8b6343" stroke-width="0.7"/>
+          <line x1="162" y1="256" x2="206" y2="256" stroke="#8b6343" stroke-width="0.7"/>
+          <path d="M164,215 Q170,213 176,215 Q182,217 188,214" fill="none" stroke="#3e2005" stroke-width="0.8"/>
+          <path d="M164,223 Q172,221 180,223 Q188,225 196,222" fill="none" stroke="#3e2005" stroke-width="0.8"/>
+          <path d="M164,231 Q169,229 174,231 Q180,233 186,230" fill="none" stroke="#3e2005" stroke-width="0.8"/>
+          <ellipse cx="44" cy="268" rx="12" ry="10" fill="#7840a0" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="char-name">Chitragupt</div>
+      <div class="char-role">चित्रगुप्त  ·  The Divine Scribe</div>
+      <div class="char-desc">
+        Chitragupt is Yamraj's accountant — the keeper of the khata, the record of every soul's deeds and wishes. He is meticulous, slightly flustered (there are a lot of souls), and takes his register very seriously.
+      </div>
+      <div class="char-quote">"Your khata already exists. This game gives you the chance to add your own entry — in your own words — before someone else writes it for you."</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <!-- WHAT IS A KHATA -->
+    <div class="section-head">
+      <div class="section-icon" style="background:#c9881a">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" fill="none" stroke="#fff" stroke-width="1.5"/><line x1="8" y1="9" x2="16" y2="9" stroke="#fff" stroke-width="1.5"/><line x1="8" y1="12" x2="16" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#fff" stroke-width="1.5"/></svg>
+      </div>
+      <div class="section-title">What is a Khata?</div>
+    </div>
+    <div class="section-body">
+      Every Indian household once had a <em>khata</em> — the shopkeeper's ledger where every transaction was recorded. Nothing forgotten. The word carries three meanings, and all three are at the heart of this game:
+    </div>
+    <div class="khata-box">
+      <ul class="khata-meanings">
+        <li><span class="meaning-num">1.</span>The <strong>account book</strong> — every act of your life, recorded since the day you were born.</li>
+        <li><span class="meaning-num">2.</span>The <strong>tab</strong> — what is owed, what has been given, what remains unsettled.</li>
+        <li><span class="meaning-num">3.</span>The <strong>mistake</strong> — <em>yeh meri khata hai.</em> The things you would like to address before the final accounting.</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- LIVING WILL -->
+    <div class="section-head">
+      <div class="section-icon" style="background:#b84a2f">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="section-title">What is a Living Will?</div>
+    </div>
+
+    <div class="qa-grid">
+      <div class="qa-card">
+        <div class="qa-q">What is it?</div>
+        <div class="qa-a">A Living Will — also called an Advance Medical Directive (AMD) — is a simple document where you write down your medical wishes for a time when you may not be able to speak for yourself. It answers: <em>if I am very ill and cannot decide, what do I want?</em></div>
+      </div>
+      <div class="qa-card">
+        <div class="qa-q">Why does it matter?</div>
+        <div class="qa-a">Without a Living Will, your family must guess what you would want — often in the middle of a crisis, when they are already grieving. Families argue. Doctors default to doing everything. The result is often more suffering, not less. Your Living Will is the gift of clarity.</div>
+      </div>
+      <div class="qa-card">
+        <div class="qa-q">Is it legal in India?</div>
+        <div class="qa-a">Yes. The Supreme Court of India made it legal in 2018 and simplified the process in 2023. You do not need a lawyer or a magistrate. Two witnesses and a notary are enough. Any adult with decision-making capacity can write one.</div>
+      </div>
+      <div class="qa-card">
+        <div class="qa-q">Who needs one?</div>
+        <div class="qa-a">Everyone. Not just the elderly or the ill. Accidents and sudden illness can happen at any age. Writing a Living Will is not a preparation for death — it is an act of love for the people who will have to make decisions for you.</div>
+      </div>
+    </div>
+
+    <div class="legal-box">
+      <div class="legal-head">Important: What Indian law says</div>
+      <div class="legal-body">
+        A valid AMD takes legal priority over family wishes. Doctors who follow a patient's AMD in good faith are protected from prosecution (Supreme Court, 2018). Withholding a ventilator per a patient's AMD is <strong>not</strong> euthanasia — it is allowing natural death. Pain relief — even strong medication — is legally permitted when comfort is the primary goal.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- WHAT TO INCLUDE -->
+    <div class="section-head">
+      <div class="section-icon" style="background:#2e7d7a">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="section-title">What to write in your Living Will</div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Your values.</strong> What matters most to you — being free from pain, being at home, staying conscious, having your rituals observed? Start here, before any medical decisions.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Your treatment preferences.</strong> Do you want CPR if your heart stops? A ventilator if you cannot breathe? A feeding tube? These are medical procedures — you have the right to say yes or no to each one.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Your healthcare representative.</strong> Name one person who knows your wishes and will speak for you. Make sure they have agreed, and make sure the rest of your family knows who they are.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Where to keep it.</strong> Give a copy to your doctor, one to your healthcare representative, and one to a trusted family member. An AMD no one can find does not protect you.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAGLINE STRIP -->
+  <div class="tagline-strip">
+    <div>
+      <div class="tagline-main">"Apni baat, apne haath."</div>
+      <div class="tagline-en">Your story, in your own hands.</div>
+    </div>
+    <div class="tagline-contact">
+      Sparsh Hospice, Hyderabad<br>
+      Sparsh Behavioral Lab<br>
+      <span style="color:#c9881a">sparshbehaviorallab.org</span>
+    </div>
+  </div>
+
+  <!-- ARTIFACT FOOTER -->
+  <div class="art-footer">
+    <!-- diya -->
+    <svg width="24" height="28" viewBox="0 0 28 32"><ellipse cx="14" cy="28" rx="12" ry="5" fill="#c27a50"/><ellipse cx="14" cy="24" rx="11" ry="4" fill="#d4956a"/><path d="M14,16 Q12,10 14,6 Q16,10 18,6 Q16,10 14,16" fill="#e8c060"/><ellipse cx="14" cy="16" rx="3.5" ry="4" fill="#e8a020" opacity="0.9"/></svg>
+    <!-- conch -->
+    <svg width="24" height="30" viewBox="0 0 32 36"><ellipse cx="16" cy="22" rx="14" ry="20" fill="#f5f0e0" stroke="#d4c090" stroke-width="1"/><path d="M8,8 Q16,4 24,10 Q28,16 24,22 Q20,28 16,28 Q10,28 6,22 Q2,16 8,8" fill="#ede0c0"/><path d="M16,28 Q14,32 12,34" fill="none" stroke="#d4c090" stroke-width="1.5"/></svg>
+    <!-- marigold -->
+    <svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="10" fill="#e8a020"/><ellipse cx="14" cy="6" rx="3.5" ry="5" fill="#f0b030"/><ellipse cx="20" cy="8" rx="3.5" ry="5" fill="#f0b030" transform="rotate(36,20,8)"/><ellipse cx="22" cy="14" rx="3.5" ry="5" fill="#f0b030" transform="rotate(72,22,14)"/><ellipse cx="20" cy="20" rx="3.5" ry="5" fill="#f0b030" transform="rotate(108,20,20)"/><ellipse cx="14" cy="22" rx="3.5" ry="5" fill="#f0b030" transform="rotate(144,14,22)"/><ellipse cx="8" cy="20" rx="3.5" ry="5" fill="#f0b030" transform="rotate(180,8,20)"/><ellipse cx="6" cy="14" rx="3.5" ry="5" fill="#f0b030" transform="rotate(216,6,14)"/><ellipse cx="8" cy="8" rx="3.5" ry="5" fill="#f0b030" transform="rotate(252,8,8)"/><circle cx="14" cy="14" r="5" fill="#e8c060"/></svg>
+    <!-- inkpot quill -->
+    <svg width="26" height="30" viewBox="0 0 26 34"><ellipse cx="13" cy="28" rx="10" ry="6" fill="#2c1a0e"/><ellipse cx="13" cy="24" rx="9" ry="5" fill="#3e2005"/><path d="M13,20 Q9,13 7,6 Q4,0 9,0 Q12,0 13,5 Q14,10 13,20" fill="#f0e0a0"/><path d="M13,20 Q14,14 15,8" fill="none" stroke="#8b4513" stroke-width="1.2"/></svg>
+    <!-- lotus -->
+    <svg width="28" height="28" viewBox="0 0 28 30"><ellipse cx="14" cy="26" rx="10" ry="4" fill="#6aaa6a" opacity="0.7"/><ellipse cx="14" cy="16" rx="6" ry="8" fill="#e8708a"/><ellipse cx="7" cy="19" rx="5" ry="7" fill="#e87090" transform="rotate(-22,7,19)"/><ellipse cx="21" cy="19" rx="5" ry="7" fill="#e87090" transform="rotate(22,21,19)"/><ellipse cx="3" cy="23" rx="4" ry="6" fill="#f090a8" transform="rotate(-38,3,23)"/><ellipse cx="25" cy="23" rx="4" ry="6" fill="#f090a8" transform="rotate(38,25,23)"/><circle cx="14" cy="14" r="5" fill="#e8c060"/></svg>
+    <!-- pigeon -->
+    <svg width="32" height="22" viewBox="0 0 44 28"><ellipse cx="20" cy="14" rx="16" ry="10" fill="#c8c0b8"/><ellipse cx="11" cy="11" rx="9" ry="7" fill="#d0c8c0"/><ellipse cx="6" cy="9" rx="4.5" ry="3.5" fill="#d0c8c0"/><ellipse cx="6" cy="8.5" rx="2" ry="2" fill="#2c1a0e"/><circle cx="5.5" cy="8" r="0.7" fill="#fff" opacity="0.7"/><path d="M2,9 Q1,8 2,7 Q3,6 5,7" fill="#d4a060"/><path d="M30,11 Q40,5 44,8 Q40,12 30,14" fill="#a8a0a0"/></svg>
+  </div>
+
+</div>
+</body>
+</html>
